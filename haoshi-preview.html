@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>好事发生 - 中文首页预览</title>
+  <style>
+    :root {
+      --bg: #fffaf4;
+      --paper: #fffdf8;
+      --paper-warm: #fff5eb;
+      --text: #2d2925;
+      --muted: #756d65;
+      --soft: #f5dfcf;
+      --line: #ead4c2;
+      --accent: #ff5a3d;
+      --accent-dark: #e94b31;
+      --green: #b9e600;
+      --gold: #b58a35;
+      --shadow: 0 24px 60px rgba(137, 82, 36, 0.1);
+      --radius: 28px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      background:
+        radial-gradient(circle at 85% 8%, rgba(255, 90, 61, 0.18), rgba(255, 250, 244, 0) 26rem),
+        radial-gradient(circle at 12% 16%, rgba(185, 230, 0, 0.11), rgba(255, 250, 244, 0) 22rem),
+        linear-gradient(180deg, #fffaf4 0%, #fffdf9 62%, #fff8f0 100%);
+      line-height: 1.55;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .gh-page {
+      overflow: hidden;
+      padding: 18px 0 0;
+    }
+
+    .gh-container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .gh-hero-card,
+    .gh-endorsement,
+    .gh-feature,
+    .gh-shot,
+    .gh-footer-note {
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .gh-hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      padding: clamp(28px, 5vw, 58px);
+      background:
+        linear-gradient(rgba(239, 214, 190, 0.28) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(239, 214, 190, 0.28) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 246, 236, 0.96));
+      background-size: 22px 22px, 22px 22px, auto;
+      isolation: isolate;
+    }
+
+    .gh-hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -6rem -7rem auto;
+      width: 19rem;
+      height: 19rem;
+      border-radius: 999px;
+      background: rgba(255, 90, 61, 0.13);
+      filter: blur(6px);
+      z-index: -1;
+    }
+
+    .gh-hero {
+      display: grid;
+      gap: clamp(28px, 5vw, 68px);
+      align-items: center;
+    }
+
+    .gh-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 18px;
+      border-radius: 999px;
+      color: var(--accent-dark);
+      background: #ffe4d8;
+      font-size: clamp(0.92rem, 1.6vw, 1.08rem);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .gh-title {
+      margin: 18px 0 0;
+      font-size: clamp(4.6rem, 12vw, 8.8rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    .gh-subtitle {
+      margin: 24px 0 0;
+      max-width: 18em;
+      color: var(--muted);
+      font-size: clamp(1.72rem, 3vw, 2.35rem);
+      line-height: 1.32;
+      font-weight: 800;
+    }
+
+    .gh-copy {
+      margin: 26px 0 0;
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 1.75vw, 1.38rem);
+      font-weight: 650;
+    }
+
+    .gh-copy strong {
+      color: var(--text);
+      font-weight: 900;
+    }
+
+    .gh-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .gh-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 0 26px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      color: var(--accent-dark);
+      background: rgba(255, 255, 255, 0.82);
+      font-size: clamp(1rem, 1.5vw, 1.22rem);
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(137, 82, 36, 0.08);
+    }
+
+    .gh-button-primary {
+      border-color: var(--accent);
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .gh-button span {
+      margin-right: 8px;
+      color: inherit;
+      font-weight: 950;
+    }
+
+    .gh-art {
+      justify-self: center;
+      width: min(100%, 430px);
+    }
+
+    .gh-icon-frame {
+      aspect-ratio: 1 / 1;
+      padding: clamp(14px, 2vw, 28px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 241, 228, 0.9));
+      box-shadow: 0 30px 70px rgba(255, 90, 61, 0.16);
+    }
+
+    .gh-icon-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      aspect-ratio: 1 / 1;
+      border-radius: 22%;
+    }
+
+    .gh-endorsement {
+      margin: clamp(28px, 5vw, 58px) auto 0;
+      padding: 26px 30px;
+      border-radius: 24px;
+    }
+
+    .gh-awards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      color: var(--gold);
+    }
+
+    .gh-award {
+      position: relative;
+      text-align: center;
+    }
+
+    .gh-award strong {
+      display: block;
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .gh-award span {
+      display: block;
+      margin-top: 6px;
+      font-size: clamp(0.95rem, 1.5vw, 1.16rem);
+      font-weight: 650;
+    }
+
+    .gh-section {
+      padding: clamp(44px, 7vw, 82px) 0 0;
+    }
+
+    .gh-section-head {
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+
+    .gh-kicker {
+      margin: 0 0 10px;
+      color: var(--accent-dark);
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .gh-section h2 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 4.9rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    .gh-section-head p:not(.gh-kicker) {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+      font-weight: 600;
+    }
+
+    .gh-features {
+      display: grid;
+      gap: 16px;
+    }
+
+    .gh-feature {
+      min-height: 190px;
+      padding: 24px;
+      border-radius: 22px;
+    }
+
+    .gh-feature-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      height: 40px;
+      margin-bottom: 18px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #ffe5d9;
+      color: var(--accent-dark);
+      font-size: 0.92rem;
+      font-weight: 900;
+    }
+
+    .gh-feature h3 {
+      margin: 0 0 8px;
+      font-size: clamp(1.2rem, 2vw, 1.48rem);
+      line-height: 1.25;
+      font-weight: 950;
+    }
+
+    .gh-feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.35vw, 1.12rem);
+      font-weight: 620;
+    }
+
+    .gh-screens {
+      display: grid;
+      gap: 20px;
+    }
+
+    .gh-shot {
+      overflow: hidden;
+      border-radius: 24px;
+      background: rgba(255, 253, 248, 0.86);
+    }
+
+    .gh-shot img {
+      width: 100%;
+      height: auto;
+    }
+
+    .gh-shot-copy {
+      padding: 18px 20px 22px;
+    }
+
+    .gh-shot-copy h3 {
+      margin: 0 0 6px;
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .gh-shot-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .gh-footer {
+      padding: 46px 0 62px;
+      text-align: center;
+    }
+
+    .gh-footer-note {
+      display: inline-flex;
+      max-width: 560px;
+      min-height: 74px;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 28px;
+      border-radius: 18px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.4vw, 1.12rem);
+      font-weight: 850;
+    }
+
+    .gh-copyright {
+      margin: 12px 0 0;
+      color: #8b827b;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    @media (min-width: 760px) {
+      .gh-page {
+        padding-top: 28px;
+      }
+
+      .gh-hero {
+        grid-template-columns: minmax(0, 1.06fr) minmax(310px, 0.78fr);
+      }
+
+      .gh-awards {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+      }
+
+      .gh-award {
+        padding: 0 24px;
+      }
+
+      .gh-award + .gh-award::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 1px;
+        height: 66px;
+        background: linear-gradient(180deg, transparent, rgba(181, 138, 53, 0.55), transparent);
+        transform: translateY(-50%);
+      }
+
+      .gh-features {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .gh-screens {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 759px) {
+      .gh-title {
+        font-size: clamp(4.1rem, 20vw, 6.2rem);
+      }
+
+      .gh-subtitle {
+        max-width: none;
+      }
+
+      .gh-button {
+        flex: 1 1 150px;
+      }
+
+      .gh-endorsement {
+        padding: 24px 20px;
+      }
+
+      .gh-award {
+        padding-bottom: 18px;
+        border-bottom: 1px solid rgba(181, 138, 53, 0.22);
+      }
+
+      .gh-award:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="gh-page">
+    <section class="gh-container gh-hero-card">
+      <div class="gh-hero">
+        <div>
+          <div class="gh-pill">iOS 与 Android 均可下载</div>
+          <h1 class="gh-title">好事发生</h1>
+          <p class="gh-subtitle">每天记录一件好事。</p>
+          <p class="gh-copy"><strong>好事发生</strong> 是你的快乐储蓄罐。今天吃到了喜欢的东西、被朋友惦记了一下、收到夸奖，或者只是路上看见了好看的天色，都可以写下来。</p>
+          <div class="gh-actions" aria-label="下载好事发生">
+            <a class="gh-button gh-button-primary" href="https://apps.apple.com/cn/app/id1612021829" target="_blank" rel="noopener"><span>iOS</span>下载</a>
+            <a class="gh-button" href="https://www.haoshiyinli.com/router.html" target="_blank" rel="noopener"><span>Android</span>下载</a>
+          </div>
+        </div>
+        <div class="gh-art" aria-label="好事发生应用图标">
+          <div class="gh-icon-frame">
+            <img src="images/app-icon.png" alt="好事发生 App 图标" width="512" height="512">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gh-container gh-endorsement" aria-label="官方背书推荐">
+      <div class="gh-awards">
+        <div class="gh-award"><strong>编辑推荐</strong><span>App Store</span></div>
+        <div class="gh-award"><strong>今日应用</strong><span>OPPO 应用市场</span></div>
+        <div class="gh-award"><strong>产品发布会推荐</strong><span>即刻</span></div>
+        <div class="gh-award"><strong>推荐应用</strong><span>少数派</span></div>
+      </div>
+    </section>
+
+    <section class="gh-container gh-section">
+      <div class="gh-section-head">
+        <p class="gh-kicker">为什么值得每天打开</p>
+        <h2>很多好事，不记下来真的会忘。</h2>
+        <p>用生活的美好和善意，点燃驱散人生寒意的篝火。</p>
+      </div>
+      <div class="gh-features">
+        <article class="gh-feature">
+          <div class="gh-feature-mark">01</div>
+          <h3>三秒钟就够</h3>
+          <p>想到什么就写一句，也可以只加一张照片。记录不用很隆重，先留下来最重要。</p>
+        </article>
+        <article class="gh-feature">
+          <div class="gh-feature-mark">02</div>
+          <h3>回看不费劲</h3>
+          <p>日历、小组件和好事书会把零散的记录慢慢串起来，回头看时不用翻半天。</p>
+        </article>
+        <article class="gh-feature">
+          <div class="gh-feature-mark">03</div>
+          <h3>想分享再分享</h3>
+          <p>先留给自己。等你愿意的时候，再把某一件好事做成卡片送出去。</p>
+        </article>
+        <article class="gh-feature">
+          <div class="gh-feature-mark">04</div>
+          <h3>更多彩蛋等你发现</h3>
+          <p>主题、深色模式、手表和一些小功能，留到你真正用起来的时候慢慢遇见。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="gh-container gh-section">
+      <div class="gh-section-head">
+        <p class="gh-kicker">用起来是什么样</p>
+        <h2>简单一点，才容易一直用下去。</h2>
+        <p>好事发生永远爱你。每当你记录好事，不只有小欢呼，还有大庆祝。</p>
+      </div>
+      <div class="gh-screens">
+        <article class="gh-shot">
+          <img src="images/zh-home.jpg" alt="好事发生首页记录截图" width="1290" height="2796" loading="lazy" decoding="async">
+          <div class="gh-shot-copy">
+            <h3>每天记录一件好事</h3>
+            <p>一句话、一张照片，都算数。</p>
+          </div>
+        </article>
+        <article class="gh-shot">
+          <img src="images/zh-edit.jpg" alt="好事发生编辑记录截图" width="1290" height="2796" loading="lazy" decoding="async">
+          <div class="gh-shot-copy">
+            <h3>写得很轻</h3>
+            <p>不想写长篇，也可以很快完成。</p>
+          </div>
+        </article>
+        <article class="gh-shot">
+          <img src="images/zh-calendar.jpg" alt="好事发生日历回看截图" width="1290" height="2796" loading="lazy" decoding="async">
+          <div class="gh-shot-copy">
+            <h3>日历里慢慢攒起来</h3>
+            <p>哪天有好事，一眼就看得到。</p>
+          </div>
+        </article>
+        <article class="gh-shot">
+          <img src="images/zh-widget.jpg" alt="好事发生小组件截图" width="1290" height="2796" loading="lazy" decoding="async">
+          <div class="gh-shot-copy">
+            <h3>偶尔被提醒一下</h3>
+            <p>过去的开心，也可以回到今天。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="gh-footer">
+      <div class="gh-container">
+        <div class="gh-footer-note">把开心的事情写下来吧，就从今天开始。✨</div>
+        <p class="gh-copyright">Copyright © 好事引力. All Rights Reserved. 京ICP备2025136090号-2</p>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

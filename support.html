@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support — Good Happens</title>
+  <meta name="description" content="Get help with Good Happens, a gratitude journal app for iOS. Find answers to common questions or contact the developer directly.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://goodhappens.app/support.html">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Support — Good Happens">
+  <meta property="og:description" content="Get help with Good Happens. Find answers to common questions or contact the developer.">
+  <meta property="og:url" content="https://goodhappens.app/support.html">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I sync my entries across devices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Good Happens uses iCloud to sync your data. Make sure you are signed in to the same Apple ID on all devices and that iCloud is enabled for Good Happens in Settings → Apple ID → iCloud."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my journal data private?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Your entries are stored only on your device and in your personal iCloud account. We do not have servers and cannot access your data. We use no analytics or tracking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I create a Good Things Book?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Open Good Happens, go to the Book section, select a date range, and the app will generate a beautifully designed journal book from your entries that you can export as a PDF to print or share."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I export my journal entries?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can share individual entries, or export a Good Things Book as a beautifully designed PDF. Your data is also backed up through iCloud."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I restore my purchases?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Go to the VIP / Premium section in the app and tap Restore Purchases. Make sure you are signed in with the same Apple ID you used for the original purchase."
+          }
+        }
+      ]
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #fffaf4;
+      --bg-soft: #fff3e6;
+      --surface: rgba(255, 255, 255, 0.86);
+      --surface-strong: #fffdf9;
+      --text: #2f2a26;
+      --muted: #6e655d;
+      --accent: #ff5c3f;
+      --accent-strong: #ef4f33;
+      --accent-soft: #ffe5d7;
+      --border: #efd9c8;
+      --shadow: 0 20px 50px rgba(116, 72, 23, 0.08);
+      --radius: 24px;
+      --max-width: 760px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%),
+        linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%);
+    }
+
+    a { color: var(--accent-strong); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .nav {
+      padding: 20px 0;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .nav a:hover {
+      background: #ffd6c4;
+      text-decoration: none;
+    }
+
+    .content-card {
+      padding: 32px 28px;
+      border-radius: 28px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .content-card h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 6vw, 2.4rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.02rem;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .content-card h2 {
+      margin: 28px 0 12px;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+
+    .content-card p, .content-card li {
+      color: var(--muted);
+      font-size: 0.98rem;
+      margin: 8px 0;
+    }
+
+    .faq-item {
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      margin: 12px 0;
+    }
+
+    .faq-item summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+      padding: 4px 0;
+    }
+
+    .faq-item summary:hover {
+      color: var(--accent-strong);
+    }
+
+    .faq-item p {
+      margin: 10px 0 4px;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .contact-card {
+      padding: 32px 28px;
+      border-radius: 28px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+    }
+
+    .contact-card h2 {
+      margin: 0 0 16px;
+      font-size: 1.3rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      font-size: 0.98rem;
+      transition: background 0.2s;
+    }
+
+    .contact-item:hover {
+      background: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .contact-value {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-mini {
+      padding: 20px 0 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-mini a {
+      color: var(--muted);
+      margin: 0 8px;
+    }
+
+    @media (min-width: 760px) {
+      .content-card, .contact-card { padding: 42px 40px; }
+      .contact-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="/">← Good Happens</a>
+    </nav>
+
+    <article class="content-card">
+      <h1>Support</h1>
+      <p class="subtitle">Find answers to common questions or get in touch directly.</p>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>How do I sync my entries across devices?</summary>
+        <p>Good Happens uses iCloud to sync your data automatically. Make sure you are signed in to the same Apple ID on all devices and that iCloud is enabled for Good Happens: go to <strong>Settings → Apple ID → iCloud</strong> and check that Good Happens is turned on.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Is my journal data private?</summary>
+        <p>Yes, completely. Your entries are stored only on your device and in your personal iCloud account. We do not have servers and cannot access your data. We use no analytics, no tracking, and no ads.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I create a Good Things Book?</summary>
+        <p>Open Good Happens, go to the Book section, select a date range, and the app will generate a beautifully designed journal from your entries. You can export it as a PDF to print, keep, or share with loved ones.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I export my journal entries?</summary>
+        <p>You can share individual entries or export a Good Things Book as a beautifully designed PDF. Your data is also automatically backed up through iCloud if enabled.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I restore my purchases?</summary>
+        <p>Go to the VIP / Premium section in the app and tap <strong>Restore Purchases</strong>. Make sure you are signed in with the same Apple ID you used for the original purchase.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>The app is not syncing. What should I do?</summary>
+        <p>Try these steps: (1) Make sure you have a stable internet connection. (2) Check that iCloud is enabled for Good Happens in your device Settings. (3) Try closing and reopening the app. (4) If the issue persists, sign out of iCloud and sign back in.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Which devices are supported?</summary>
+        <p>Good Happens works on iPhone, iPad, Apple Watch, Mac (Apple Silicon), and Apple Vision Pro. All devices sync through iCloud when enabled.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I switch between light and dark mode?</summary>
+        <p>Good Happens follows your system appearance by default. You can also choose from multiple skins within the app's settings to customize the look to your preference.</p>
+      </details>
+    </article>
+
+    <div class="contact-card">
+      <h2>Still need help?</h2>
+      <div class="contact-grid">
+        <a class="contact-item" href="mailto:goodhappens@163.com">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">goodhappens@163.com</div>
+          </div>
+        </a>
+        <a class="contact-item" href="https://x.com/MengkePM" target="_blank" rel="noopener">
+          <div class="contact-icon">𝕏</div>
+          <div>
+            <div class="contact-label">X / Twitter</div>
+            <div class="contact-value">@MengkePM</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-mini">
+      <a href="/">Home</a> · <a href="/support.html">Support</a> · <a href="/privacy.html">Privacy</a>
+      <br>Made with ♥ by Mengke Wang
+    </div>
+  </div>
+</body>
+</html>

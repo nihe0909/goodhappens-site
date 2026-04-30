@@ -1,0 +1,38 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="84" x2="1086" y2="582" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F0"/>
+      <stop offset="1" stop-color="#FFF1E3"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="156" y1="120" x2="1026" y2="510" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#FFF8F1" stop-opacity="0.98"/>
+    </linearGradient>
+    <filter id="shadow" x="113" y="84" width="974" height="486" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="21.5"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.45098 0 0 0 0 0.282353 0 0 0 0 0.0901961 0 0 0 0.14 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1012" cy="118" r="110" fill="#FFE4D3"/>
+  <circle cx="151" cy="565" r="122" fill="#FFF1E1"/>
+  <g filter="url(#shadow)">
+    <rect x="156" y="109" width="888" height="400" rx="36" fill="url(#panel)"/>
+  </g>
+  <rect x="204" y="157" width="304" height="304" rx="72" fill="#F1DABD"/>
+  <circle cx="356" cy="309" r="118" fill="#FF5C3F"/>
+  <path d="M356 224C340.923 249.865 315.395 265.717 286 265.717C315.395 265.717 340.923 281.569 356 307.434C371.077 281.569 396.605 265.717 426 265.717C396.605 265.717 371.077 249.865 356 224Z" fill="#BFE700"/>
+  <path d="M356 394C340.923 368.135 315.395 352.283 286 352.283C315.395 352.283 340.923 336.431 356 310.566C371.077 336.431 396.605 352.283 426 352.283C396.605 352.283 371.077 368.135 356 394Z" fill="#BFE700"/>
+  <circle cx="356" cy="309" r="20" fill="#78652F"/>
+  <rect x="564" y="173" width="140" height="36" rx="18" fill="#FFE5D7"/>
+  <text x="584" y="197" fill="#E8533F" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">iOS &amp; visionOS</text>
+  <text x="564" y="278" fill="#2F2A26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="72" font-weight="800" letter-spacing="-2">Good Happens</text>
+  <text x="564" y="338" fill="#6E655D" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="500">Track the good things in your life,</text>
+  <text x="564" y="382" fill="#6E655D" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="500">one day at a time.</text>
+  <text x="564" y="448" fill="#8A786B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="500">A beautiful private gratitude journal for iPhone and Apple Vision Pro.</text>
+</svg>
