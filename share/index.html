@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>分享好事发生，让好事加倍</title>
+  <meta name="description" content="分享你的好事发生使用方式，获得好事发生会员。你记录的每一件好事，都值得被看见。">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://goodhappens.app/share/">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="分享好事发生，让好事加倍">
+  <meta property="og:description" content="分享你的好事发生使用方式，获得好事发生会员。">
+  <meta property="og:url" content="https://goodhappens.app/share/">
+  <style>
+    :root {
+      --bg: #fffaf4;
+      --bg-soft: #fff3e6;
+      --surface: rgba(255, 255, 255, 0.86);
+      --surface-strong: #fffdf9;
+      --text: #2f2a26;
+      --muted: #6e655d;
+      --accent: #ff5c3f;
+      --accent-strong: #ef4f33;
+      --accent-soft: #ffe5d7;
+      --border: #efd9c8;
+      --shadow: 0 20px 50px rgba(116, 72, 23, 0.08);
+      --gold: #d4a24e;
+      --gold-soft: #fff8ed;
+      --gold-border: #f0dbb8;
+      --radius: 24px;
+      --max-width: 760px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%),
+        linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%);
+    }
+
+    a { color: var(--accent-strong); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    /* ── Nav ── */
+    .nav { padding: 20px 0; }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .nav a:hover { background: #ffd6c4; text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero-card {
+      padding: 36px 28px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 200, 120, 0.15), transparent 60%),
+        var(--surface-strong);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .hero-emoji { font-size: 3rem; margin-bottom: 8px; }
+
+    .hero-card h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      font-size: 1.02rem;
+      max-width: 28rem;
+      margin: 0 auto;
+    }
+
+    /* ── Section Cards ── */
+    .section-card {
+      padding: 28px 24px;
+      border-radius: 28px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .section-card h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-card h2 .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 0.82rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Reward Table ── */
+    .reward-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      margin-bottom: 16px;
+    }
+
+    .reward-table td {
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 0.98rem;
+    }
+
+    .reward-table tr td:first-child {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      font-weight: 600;
+      color: var(--text);
+      border-right: none;
+      border-radius: 16px 0 0 16px;
+    }
+
+    .reward-table tr td:last-child {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      border-left: none;
+      border-radius: 0 16px 16px 0;
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .reward-notes {
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .reward-notes li { padding: 3px 0; }
+    .reward-notes li::before { content: "· "; color: var(--gold); font-weight: 700; }
+
+    /* ── Steps ── */
+    .step {
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      margin: 12px 0;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .step strong { color: var(--text); }
+
+    .step p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .platform-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .platform {
+      padding: 6px 14px;
+      border-radius: 12px;
+      background: var(--gold-soft);
+      border: 1px solid var(--gold-border);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .email-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: var(--accent-soft);
+      margin: 12px 0;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+
+    .email-box:hover { background: #ffd6c4; text-decoration: none; }
+
+    .email-icon { font-size: 1.2rem; }
+
+    .email-addr {
+      font-weight: 700;
+      color: var(--accent-strong);
+    }
+
+    .email-format {
+      margin: 10px 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      font-size: 0.88rem;
+      color: var(--muted);
+      word-break: break-all;
+    }
+
+    .email-format code {
+      display: block;
+      margin-top: 4px;
+      color: var(--text);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    /* ── Inspiration Grid ── */
+    .inspiration-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .inspiration-item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .inspiration-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(116, 72, 23, 0.06);
+    }
+
+    .inspiration-item .emoji {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .inspiration-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+
+    .inspiration-item span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* ── Standards List ── */
+    .standards-list {
+      padding-left: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .standards-list li {
+      padding: 6px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .standards-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── Quote ── */
+    .quote-block {
+      padding: 24px;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at bottom left, rgba(255, 200, 120, 0.1), transparent 60%),
+        rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(239, 217, 200, 0.9);
+      margin: 20px 0 0;
+      text-align: center;
+    }
+
+    .quote-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    .quote-block .author {
+      margin-top: 8px;
+      font-style: normal;
+      font-size: 0.85rem;
+      color: var(--gold);
+    }
+
+    /* ── Footer ── */
+    .footer-mini {
+      padding: 20px 0 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    .footer-mini a { color: var(--muted); margin: 0 6px; }
+
+    /* ── Responsive ── */
+    @media (min-width: 580px) {
+      .hero-card { padding: 48px 40px; }
+      .section-card { padding: 36px 32px; }
+      .inspiration-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var ua = navigator.userAgent || navigator.vendor || window.opera;
+      var isAndroid = /android/i.test(ua);
+      var urlParams = new URLSearchParams(window.location.search);
+      var platform = urlParams.get('platform');
+      
+      // 如果是安卓设备，或者 URL 明确指定了是 android 平台
+      if (isAndroid || platform === 'android') {
+        var appleDisclaimer = document.getElementById("apple-disclaimer");
+        if (appleDisclaimer) appleDisclaimer.style.display = "none";
+        
+        var appleWatchItem = document.getElementById("apple-watch-item");
+        if (appleWatchItem) appleWatchItem.style.display = "none";
+        
+        var platformText = document.getElementById("platform-text");
+        if (platformText) platformText.style.display = "none";
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="/">← Good Happens</a>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero-card">
+      <div class="hero-emoji">✨</div>
+      <h1>分享你的好事发生<br>获得好事发生会员</h1>
+      <p class="hero-subtitle">你记录的每一件好事，都值得被看见。<br>分享你的使用方式，让更多人发现生活中的美好。</p>
+    </div>
+
+    <!-- 一、奖励规则 -->
+    <div class="section-card">
+      <h2><span class="num">一</span> 奖励规则</h2>
+      <table class="reward-table">
+        <tr>
+          <td>帖子点赞 10 以上</td>
+          <td>🎁 月度会员</td>
+        </tr>
+        <tr>
+          <td>帖子点赞 30 以上</td>
+          <td>🎁 年度会员</td>
+        </tr>
+        <tr>
+          <td>帖子点赞 100 以上</td>
+          <td>🎁 永久会员</td>
+        </tr>
+      </table>
+      <ul class="reward-notes">
+        <li>每位用户最多兑换一次，按达成的最高档发放</li>
+        <li id="platform-text">iOS 与 Android 用户均可参与</li>
+        <li>奖励将在 2 个工作日内发放</li>
+      </ul>
+    </div>
+
+    <!-- 二、参与方式 -->
+    <div class="section-card">
+      <h2><span class="num">二</span> 参与方式</h2>
+      <p style="color: var(--muted); margin: 0 0 12px; font-size: 0.95rem;">只需 2 步：</p>
+
+      <div class="step">
+        <span class="step-num">1</span>
+        <strong>截图、录屏或写下你的使用感受</strong>
+        <p>发布到以下任一平台：</p>
+        <div class="platform-list">
+          <span class="platform">小红书</span>
+          <span class="platform">抖音</span>
+          <span class="platform">B站</span>
+          <span class="platform">视频号</span>
+        </div>
+        <p>请带上话题：</p>
+        <div class="tag-list">
+          <span class="tag">#好事发生</span>
+          <span class="tag">#好事发生app</span>
+          <span class="tag">#好事发生App</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-num">2</span>
+        <strong>点赞达标后，发邮件领取奖励</strong>
+        <a class="email-box" href="mailto:goodhappens@163.com?subject=%E3%80%90%E5%A5%BD%E4%BA%8B%E4%BC%A0%E6%92%AD%E5%AE%98%E3%80%91%E5%B9%B3%E5%8F%B0%20%2F%20%E7%94%A8%E6%88%B7%E5%90%8D%20%2F%20%E7%82%B9%E8%B5%9E%E6%95%B0%20%2F%20Android%E6%88%96iOS">
+          <span class="email-icon">📮</span>
+          <span class="email-addr">goodhappens@163.com</span>
+        </a>
+        <div class="email-format">
+          邮件标题格式：
+          <code>【好事传播官】平台 / 用户名 / 点赞数 / Android或iOS</code>
+        </div>
+        <p>请附上：帖子截图 + 点赞数截图</p>
+      </div>
+    </div>
+
+    <!-- 三、内容灵感 -->
+    <div class="section-card">
+      <h2><span class="num">三</span> 内容灵感</h2>
+      <p style="color: var(--muted); margin: 0 0 12px; font-size: 0.95rem;">你可以分享：</p>
+      <div class="inspiration-grid">
+        <div class="inspiration-item">
+          <span class="emoji">🌟</span>
+          <strong>你的好事星图</strong>
+          <span>晒出独一无二的好事宇宙，说说哪个星座最让你意外</span>
+        </div>
+        <div class="inspiration-item">
+          <span class="emoji">📅</span>
+          <strong>日历上的小柿子</strong>
+          <span>好事越多，柿子越满——犒赏认真生活的自己</span>
+        </div>
+        <div class="inspiration-item">
+          <span class="emoji">🧩</span>
+          <strong>桌面小组件搭配</strong>
+          <span>好事回顾组件和壁纸的搭配，展示你的桌面美学</span>
+        </div>
+        <div class="inspiration-item">
+          <span class="emoji">📖</span>
+          <strong>你的好事书</strong>
+          <span>导出的好事书，是你送给自己的一本生活情书</span>
+        </div>
+        <div class="inspiration-item" id="apple-watch-item">
+          <span class="emoji">⌚</span>
+          <strong>Apple Watch 幸运手环</strong>
+          <span>一抬手就是一句温暖的话，随身携带好运</span>
+        </div>
+        <div class="inspiration-item">
+          <span class="emoji">🌙</span>
+          <strong>你的记录习惯</strong>
+          <span>睡前记好事，给每一天画上句号。分享坚持后的变化</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 四、审核标准 -->
+    <div class="section-card">
+      <h2><span class="num">四</span> 审核标准</h2>
+      <ul class="standards-list">
+        <li>图文至少 3 张截图，并附 30 字以上真实使用感受</li>
+        <li>视频不少于 10 秒</li>
+        <li>内容需展示好事发生 App 界面（有正常使用痕迹）</li>
+        <li>避免出现兑换码、互赞互关等内容</li>
+        <li>点赞数以提交审核时的截图为准</li>
+        <li>兑换成功后帖子需保持公开可见</li>
+      </ul>
+
+      <div class="quote-block">
+        <p>记录好事，是在培养自己快乐的能力。<br><br>
+        "洗一个澡，看一朵花，吃一顿饭，<br>
+        假使你觉得快活，并非全因为澡洗得干净，<br>
+        花开得好，或者菜合你口味，<br>
+        主要因为你心上没有挂碍。"</p>
+        <div class="author">—— 钱钟书</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-mini">
+      好事发生 · <a href="/">goodhappens.app</a><br>
+      活动咨询：<a href="mailto:goodhappens@163.com">goodhappens@163.com</a><br><br>
+      <span id="apple-disclaimer">本活动由好事发生独立发起和运营，与 Apple Inc. 无关。</span>
+    </div>
+  </div>
+</body>
+</html>
