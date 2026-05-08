@@ -19,7 +19,7 @@
         body { font-family: var(--font-sans); background: radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%), linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%); color: var(--text); line-height: 1.85; font-size: 16px; -webkit-font-smoothing: antialiased; }
         .layout { display: flex; min-height: 100vh; }
         /* Sidebar */
-        .sidebar { width: var(--sidebar-w); position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; z-index: 100; transition: transform 0.3s ease; }
+        .sidebar { width: var(--sidebar-w); position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; z-index: 100; transition: transform 0.3s ease; display: flex; flex-direction: column; }
         .sidebar::-webkit-scrollbar { width: 4px; } .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
         .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
         .sidebar-logo img { width: 32px; height: 32px; border-radius: 8px; }
@@ -30,7 +30,7 @@
         .nav-item:hover { background: var(--accent-soft); color: var(--accent); }
         .nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
         .nav-sub { padding-left: 16px; }
-        .promo-btn { display: block; padding: 10px 12px; border-radius: 8px; background: linear-gradient(135deg, var(--accent-soft), #ffe8df); color: var(--accent-strong); text-decoration: none; font-size: 14px; font-weight: 700; text-align: center; border: 1px solid rgba(255, 92, 63, 0.2); transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 12px; }
+        .promo-btn { display: block; padding: 10px 16px; border-radius: 12px; background: linear-gradient(135deg, var(--accent-soft), #ffe8df); color: var(--accent-strong); text-decoration: none; font-size: 15px; font-weight: 700; text-align: left; border: 1px solid rgba(255, 92, 63, 0.2); transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 8px; }
         .promo-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 92, 63, 0.15); }
         /* Main content */
         .main { margin-left: var(--sidebar-w); flex: 1; padding: 48px 56px 80px; max-width: 860px; }
@@ -252,7 +252,7 @@
         main img:hover {
             filter: brightness(0.95);
         }
-            .nav-item.main-tab { background: linear-gradient(135deg, var(--gold-soft), #fffdf9); color: var(--gold); border: 1px solid var(--gold-border); font-weight: 700; font-size: 1.05rem; padding: 10px 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(212, 162, 78, 0.08); margin-bottom: 8px; }
+            .nav-item.main-tab { background: linear-gradient(135deg, var(--gold-soft), #fffdf9); color: var(--gold); border: 1px solid var(--gold-border); font-weight: 700; font-size: 15px; padding: 10px 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(212, 162, 78, 0.08); margin-bottom: 8px; }
         .nav-item.main-tab:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212, 162, 78, 0.15); }
     </style>
 </head>
@@ -270,8 +270,8 @@
             <div class="sidebar-logo" style="align-items: center;">
                 <img src="images/friend/logo.png" alt="好事发生" style="width: 36px; height: 36px; border-radius: 10px;">
                 <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 2px;">
-                    <span style="font-size: 16px; font-weight: 700; line-height: 1.2; color: var(--text); letter-spacing: 0.5px;">好事发生</span>
-                    <span style="font-size: 12px; font-weight: 600; color: var(--accent); line-height: 1.2; margin-top: 2px;">和她的朋友们</span>
+                    <span style="font-size: 15px; font-weight: 700; line-height: 1.2; color: var(--text);">好事发生</span>
+                    <span style="font-size: 15px; font-weight: 600; color: var(--accent); line-height: 1.2; margin-top: 2px;">和她的朋友们</span>
                 </div>
             </div>
             <nav>
@@ -308,6 +308,9 @@
                     <a class="nav-item" href="#thanks">特别感谢</a>
                 </div>
             </nav>
+            <div style="margin-top: 24px; padding: 16px 24px 0; border-top: 1px solid var(--border);">
+                <a href="https://goodhappens.app" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s;"><span style="font-size: 16px;">←</span> 返回官网首页</a>
+            </div>
             <div class="lang-switch"><a href="friend-en.html">English Version</a></div>
         </aside>
 
