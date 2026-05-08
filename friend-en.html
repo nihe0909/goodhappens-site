@@ -6,17 +6,17 @@
     <title>Good Happens & Friends</title>
     <meta name="description" content="Good Happens - A journaling app dedicated to recording the good things in your life. We believe good news has a magical gravity.">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         :root {
-            --bg: #fffaf4; --card: #ffffff; --text: #2c2c2c; --text-light: #666;
-            --accent: #ff5c3f; --accent-soft: #fff0ed; --border: #f0e8df;
+            --bg: #fffaf4; --card: #ffffff; --text: #2c2c2c; --text-light: #999;
+            --accent: #ff5c3f; --accent-soft: #fff0ed; --accent-strong: #e64a2e; --border: #eee5db;
             --gold: #d4a24e; --gold-soft: #fff8ed; --gold-border: #f0dbb8;
-            --sidebar-w: 240px;
-            --font-sans: 'Noto Sans', -apple-system, sans-serif;
+            --sidebar-w: 260px;
+            --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
         }
-        body { font-family: var(--font-sans); background: radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%), linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%); color: var(--text); line-height: 1.8; font-size: 15px; }
+        body { font-family: var(--font-sans); background: radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%), linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%); color: var(--text); line-height: 1.85; font-size: 16px; -webkit-font-smoothing: antialiased; }
         .layout { display: flex; min-height: 100vh; }
         /* Sidebar */
         .sidebar { width: var(--sidebar-w); position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; z-index: 100; transition: transform 0.3s ease; }
@@ -25,20 +25,31 @@
         .sidebar-logo img { width: 32px; height: 32px; border-radius: 8px; }
         .sidebar-logo span { font-size: 15px; font-weight: 600; color: var(--text); }
         .nav-group { padding: 0 12px; margin-bottom: 8px; }
-        .nav-item { display: block; padding: 8px 14px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 14px; transition: all 0.2s; cursor: pointer; }
+        .nav-group-title { font-size: 12px; font-weight: 700; color: var(--text-light); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nav-item { display: block; padding: 6px 12px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 14px; transition: all 0.2s; cursor: pointer; }
         .nav-item:hover { background: var(--accent-soft); color: var(--accent); }
         .nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+        .nav-sub { padding-left: 16px; }
+        .promo-btn { display: block; padding: 10px 12px; border-radius: 8px; background: linear-gradient(135deg, var(--accent-soft), #ffe8df); color: var(--accent-strong); text-decoration: none; font-size: 14px; font-weight: 700; text-align: center; border: 1px solid rgba(255, 92, 63, 0.2); transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 12px; }
+        .promo-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 92, 63, 0.15); }
         /* Main content */
-        .main { margin-left: var(--sidebar-w); flex: 1; padding: 40px 48px 80px; max-width: 800px; }
-        .section { padding-top: 24px; display: none; }
+        .main { margin-left: var(--sidebar-w); flex: 1; padding: 48px 56px 80px; max-width: 860px; }
+        .section { padding-top: 8px; display: none; }
         .section.active { display: block; }
-        .section h1 { font-size: 28px; font-weight: 700; margin-bottom: 20px; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 12px; }
-        .section h2 { font-size: 20px; font-weight: 600; margin: 28px 0 14px; color: var(--text); }
-        .section p { margin-bottom: 14px; color: var(--text); }
-        .section ul { margin: 12px 0; padding-left: 24px; }
-        .section li { margin-bottom: 8px; }
+        .section h1 { font-size: 2em; font-weight: 700; margin-bottom: 0.75em; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 0.5em; line-height: 1.3; }
+        .section h2 { font-size: 1.35em; font-weight: 600; margin: 2em 0 0.8em; color: var(--text); padding-bottom: 0.5em; border-bottom: 1px solid var(--border); line-height: 1.4; }
+        .section h3 { font-size: 1.15em; font-weight: 600; margin: 1.5em 0 0.6em; line-height: 1.4; }
+        .section p { margin-bottom: 1em; color: var(--text); }
+        .section ul, .section ol { margin: 0.8em 0; padding-left: 1.5em; }
+        .section li { margin-bottom: 0.5em; }
+        .section img { max-width: 100%; border-radius: 12px; margin: 1.2em 0; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
         .section a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
         .section a:hover { border-bottom-color: var(--accent); }
+        .section blockquote { background: linear-gradient(135deg, #fff8f0, #fff3ed); border-left: 3px solid var(--accent); padding: 1em 1.2em; border-radius: 0 10px 10px 0; margin: 1.2em 0; color: #555; font-style: italic; }
+        .section blockquote p { margin-bottom: 0.5em; }
+        .section blockquote p:last-child { margin-bottom: 0; }
+        .section strong { color: #1a1a1a; }
+        .emoji-deco { text-align: center; font-size: 1.1em; letter-spacing: 2px; padding: 8px 0 4px; margin-bottom: 1.2em; color: var(--text-light); }
         /* FAQ */
         .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; margin-bottom: 16px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
         .faq-item:hover { box-shadow: 0 8px 24px rgba(116, 72, 23, 0.04); transform: translateY(-1px); }
@@ -51,21 +62,51 @@
         .faq-a p:last-child { margin-bottom: 0; }
         .faq-a ul { padding-left: 20px; color: var(--text-light); font-size: 0.95rem; margin-bottom: 12px; }
         .faq-a li { margin-bottom: 8px; }
+        /* Team */
+        .team-member { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .team-member:last-child { border-bottom: none; }
         /* Footer */
-        .footer { text-align: center; padding: 40px 20px; color: var(--text-light); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; display: none; }
+        .footer { text-align: center; padding: 48px 20px; color: var(--text-light); font-size: 14px; border-top: 1px solid var(--border); margin-top: 48px; display: none; }
+        .section#thanks.active ~ .footer { display: block; }
         /* Page nav */
         .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-        .page-nav a { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 8px; color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; cursor: pointer; }
-        .page-nav a:hover { background: var(--accent-soft); }
-        .page-nav .prev::before { content: '←'; }
-        .page-nav .next::after { content: '→'; }
+        .page-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 99px; background: #fff; color: var(--text); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); font-size: 15px; font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-decoration: none; }
+        .page-nav a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); color: var(--accent); border-color: rgba(255, 92, 63, 0.3); }
+        
+        .page-nav .prev::before { content: '←'; color: var(--text-light); transition: color 0.3s; }
+        .page-nav a:hover.prev::before { color: var(--accent); }
+        .page-nav .next::after { content: '→'; color: var(--text-light); transition: color 0.3s; }
+        .page-nav a:hover.next::after { color: var(--accent); }
         .page-nav .spacer { flex: 1; }
         /* Language switch */
         .lang-switch { padding: 16px 24px; border-top: 1px solid var(--border); margin-top: 12px; }
         .lang-switch a { display: block; padding: 8px 14px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 13px; text-align: center; transition: all 0.2s; }
         .lang-switch a:hover { background: var(--accent-soft); color: var(--accent); }
-        
-        /* New Aesthetics & Share Section Styles */
+        /* Mobile toggle */
+        .mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: var(--card); border-bottom: 1px solid var(--border); z-index: 200; padding: 0 16px; align-items: center; gap: 12px; }
+        .menu-btn { width: 36px; height: 36px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; background: none; border: none; }
+        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 1px; transition: all 0.3s; }
+        .mobile-header .logo-text { font-size: 15px; font-weight: 600; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; }
+        /* Good event card */
+        .event-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 12px 0; }
+        .event-date { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+        .event-text { font-size: 14px; }
+        /* Quote block */
+        .quote-block { background: linear-gradient(135deg, #fff8f0, #fff0ed); border-left: 3px solid var(--accent); padding: 20px 24px; border-radius: 0 12px 12px 0; margin: 20px 0; font-style: italic; }
+        @media (max-width: 768px) {
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); width: 230px; }
+            .sidebar.open { transform: translateX(0); padding-top: 60px; }
+            .overlay.open { display: block; }
+            .main { margin-left: 0; padding: 72px 32px 60px; }
+            .section h1 { font-size: 1.65em; }
+            .section h2 { font-size: 1.2em; }
+        }
+        /* Reduce excessive spacing from VuePress br tags */
+        br + br { display: none; }
+
+        /* New Aesthetics */
         .hero-card { padding: 40px 32px; border-radius: 28px; background: radial-gradient(circle at top right, rgba(255, 200, 120, 0.15), transparent 60%), var(--card); border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(116, 72, 23, 0.05); margin-bottom: 24px; text-align: center; }
         .hero-card h1 { border-bottom: none !important; margin: 0 0 12px !important; font-size: 2.2rem !important; }
         .hero-emoji { font-size: 3.5rem; margin-bottom: 8px; line-height: 1; display: block; }
@@ -77,6 +118,7 @@
         .feature-item div strong { display: block; margin-bottom: 4px; font-size: 1.05rem; color: var(--text); }
         .feature-item div p { margin: 0 !important; color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
         
+        /* Share Section Styles */
         .section-card h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); font-size: 0.82rem; font-weight: 700; flex-shrink: 0; margin-right: 8px; }
         .reward-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-bottom: 16px; }
         .reward-table td { padding: 14px 16px; border-radius: 16px; font-size: 0.98rem; }
@@ -108,21 +150,26 @@
         .standards-list li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
         .contact-card { display: flex; align-items: center; gap: 20px; padding: 24px; border-radius: 24px; background: linear-gradient(135deg, var(--accent-soft), #fffcf9); border: 1px solid var(--border); }
         .contact-card img { width: 100px; height: 100px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        /* Mobile */
-        .mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: var(--card); border-bottom: 1px solid var(--border); z-index: 200; padding: 0 16px; align-items: center; gap: 12px; }
-        .menu-btn { width: 36px; height: 36px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; background: none; border: none; }
-        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 1px; transition: all 0.3s; }
-        .mobile-header .logo-text { font-size: 15px; font-weight: 600; }
-        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; }
-        @media (max-width: 768px) {
-            .mobile-header { display: flex; }
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); padding-top: 60px; }
-            .overlay.open { display: block; }
-            .main { margin-left: 0; padding: 68px 20px 60px; }
-            .section h1 { font-size: 22px; }
+
+        @media (min-width: 600px) { 
+            .feature-grid { grid-template-columns: repeat(2, 1fr); } 
+            .inspiration-grid { grid-template-columns: repeat(2, 1fr); }
         }
     
+        
+        .co-creator-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255, 92, 63, 0.1), rgba(255, 92, 63, 0.03));
+            color: var(--accent-strong);
+            padding: 6px 18px;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 92, 63, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 92, 63, 0.05);
+        }
+
         /* Lockscreen Gallery Masonry */
         .lockscreen-gallery {
             column-count: 2;
@@ -241,7 +288,7 @@
         <main class="main">
 
             <!-- ABOUT -->
-            <section class="section" id="about">
+            <section class="section" id="hello">
                 <div class="hero-card">
                     <span class="hero-emoji">👋</span>
                     <h1 id="about-title">Hi, Friend</h1>
@@ -250,7 +297,8 @@
 
                 <div class="section-card">
                     <p>Happy moments immerse you and make you forget time, but they're far easier to forget than bad news. That's why it's essential to write them down before they slip away.</p>
-                    <p><strong>"People worry too much because they have too good a memory."</strong> But recording good things helps us break the endless cycle of self-doubt, and boosts our happiness and confidence. Whether it's something as simple as enjoying your favorite food, or a major milestone like a promotion — everything deserves to be recorded and revisited.</p>
+                    <p><strong>"People worry too much because they have too good a memory."</strong> But recording good things helps us break the endless cycle of self-doubt, and boosts our happiness and confidence.</p>
+                    <p>Whether it's something as simple as enjoying your favorite food, or a major milestone like a promotion — everything deserves to be recorded and revisited.</p>
                     <p>Kind and thoughtful people always notice those shining moments in life, using beauty and warmth to light a fire that keeps the cold at bay.</p>
                 </div>
 
@@ -367,7 +415,7 @@
                       Email Subject Format:
                       <code>【Share to Win】Platform / Username / Likes / Android or iOS</code>
                     </div>
-                    <p>Please attach: A screenshot of the post showing the number of likes.</p>
+                    <p>Please attach: Publish link + Post screenshot + Homepage screenshot + Likes screenshot</p>
                   </div>
                 </div>
 
