@@ -252,6 +252,8 @@
         main img:hover {
             filter: brightness(0.95);
         }
+            .nav-item.main-tab { background: linear-gradient(135deg, var(--gold-soft), #fffdf9); color: var(--gold); border: 1px solid var(--gold-border); font-weight: 700; font-size: 1.05rem; padding: 10px 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(212, 162, 78, 0.08); margin-bottom: 8px; }
+        .nav-item.main-tab:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212, 162, 78, 0.15); }
     </style>
 </head>
 <body>
@@ -264,13 +266,16 @@
 
     <div class="layout">
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-logo">
-                <img src="images/friend/logo.png" alt="Good Happens">
-                <span>Good Happens & Friends</span>
+            <div class="sidebar-logo" style="align-items: center;">
+                <img src="images/friend/logo.png" alt="Good Happens" style="width: 36px; height: 36px; border-radius: 10px;">
+                <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 2px;">
+                    <span style="font-size: 15px; font-weight: 700; line-height: 1.2; color: var(--text); letter-spacing: -0.2px;">Good Happens</span>
+                    <span style="font-size: 13px; font-weight: 500; color: var(--accent); line-height: 1.2; margin-top: 2px;">& Friends</span>
+                </div>
             </div>
                         <nav>
                 <div class="nav-group">
-                    <a class="nav-item active" href="#hello">🌟 Hello Friend</a>
+                    <a class="nav-item active main-tab" href="#hello">✨ Hello Friend</a>
                 </div>
                 <div class="nav-group">
                     <a class="promo-btn" href="#share">🎁 Share to Win</a>
@@ -512,7 +517,7 @@
                 </div>
 
                 <div class="section-card" style="text-align: center; border: none; background: transparent; box-shadow: none;">
-                    <img src="images/friend/happy-B5DuZjQP.png" alt="Happy Every Day" style="width: 140px; margin: 0 auto 16px;">
+                    <div style="font-size: 72px; margin-bottom: 16px; filter: drop-shadow(0 8px 16px rgba(255, 92, 63, 0.15));">🍊</div>
                     <p style="font-size: 1.1rem; color: var(--accent-strong); font-weight: 600;">Wishing you a happy day.</p>
                     <p style="color: var(--text-light);">Official Website: <a href="https://goodhappens.app" target="_blank" rel="noopener noreferrer">goodhappens.app</a></p>
                 </div>
