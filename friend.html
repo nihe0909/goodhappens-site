@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>好事发生和她的朋友们</title>
+    <meta name="description" content="好事发生App - 为你专门记录好消息的软件。我们相信好消息拥有着神奇引力，关注美好的人会获得更多美好。">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        :root {
+            --bg: #fffaf4; --card: #ffffff; --text: #2c2c2c; --text-light: #999;
+            --accent: #ff5c3f; --accent-soft: #fff0ed; --accent-strong: #e64a2e; --border: #eee5db;
+            --gold: #d4a24e; --gold-soft: #fff8ed; --gold-border: #f0dbb8;
+            --sidebar-w: 260px;
+            --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+        }
+        body { font-family: var(--font-sans); background: radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%), linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%); color: var(--text); line-height: 1.85; font-size: 16px; -webkit-font-smoothing: antialiased; }
+        .layout { display: flex; min-height: 100vh; }
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-w); position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; z-index: 100; transition: transform 0.3s ease; }
+        .sidebar::-webkit-scrollbar { width: 4px; } .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .sidebar-logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .sidebar-logo span { font-size: 15px; font-weight: 600; color: var(--text); }
+        .nav-group { padding: 0 12px; margin-bottom: 8px; }
+        .nav-group-title { font-size: 12px; font-weight: 700; color: var(--text-light); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nav-item { display: block; padding: 6px 12px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 14px; transition: all 0.2s; cursor: pointer; }
+        .nav-item:hover { background: var(--accent-soft); color: var(--accent); }
+        .nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+        .nav-sub { padding-left: 16px; }
+        .promo-btn { display: block; padding: 10px 12px; border-radius: 8px; background: linear-gradient(135deg, var(--accent-soft), #ffe8df); color: var(--accent-strong); text-decoration: none; font-size: 14px; font-weight: 700; text-align: center; border: 1px solid rgba(255, 92, 63, 0.2); transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 12px; }
+        .promo-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 92, 63, 0.15); }
+        /* Main content */
+        .main { margin-left: var(--sidebar-w); flex: 1; padding: 48px 56px 80px; max-width: 860px; }
+        .section { padding-top: 8px; display: none; }
+        .section.active { display: block; }
+        .section h1 { font-size: 2em; font-weight: 700; margin-bottom: 0.75em; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 0.5em; line-height: 1.3; }
+        .section h2 { font-size: 1.35em; font-weight: 600; margin: 2em 0 0.8em; color: var(--text); padding-bottom: 0.5em; border-bottom: 1px solid var(--border); line-height: 1.4; }
+        .section h3 { font-size: 1.15em; font-weight: 600; margin: 1.5em 0 0.6em; line-height: 1.4; }
+        .section p { margin-bottom: 1em; color: var(--text); }
+        .section ul, .section ol { margin: 0.8em 0; padding-left: 1.5em; }
+        .section li { margin-bottom: 0.5em; }
+        .section img { max-width: 100%; border-radius: 12px; margin: 1.2em 0; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+        .section a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+        .section a:hover { border-bottom-color: var(--accent); }
+        .section blockquote { background: linear-gradient(135deg, #fff8f0, #fff3ed); border-left: 3px solid var(--accent); padding: 1em 1.2em; border-radius: 0 10px 10px 0; margin: 1.2em 0; color: #555; font-style: italic; }
+        .section blockquote p { margin-bottom: 0.5em; }
+        .section blockquote p:last-child { margin-bottom: 0; }
+        .section strong { color: #1a1a1a; }
+        .emoji-deco { text-align: center; font-size: 1.1em; letter-spacing: 2px; padding: 8px 0 4px; margin-bottom: 1.2em; color: var(--text-light); }
+        /* FAQ */
+        .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; margin-bottom: 16px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+        .faq-item:hover { box-shadow: 0 8px 24px rgba(116, 72, 23, 0.04); transform: translateY(-1px); }
+        .faq-q { padding: 20px 24px; font-weight: 600; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--text); }
+        .faq-q::after { content: '+'; font-size: 1.5rem; font-weight: 300; transition: transform 0.3s ease, color 0.2s; color: var(--text-light); }
+        .faq-item.open .faq-q::after { transform: rotate(45deg); color: var(--accent); }
+        .faq-a { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
+        .faq-item.open .faq-a { padding: 0 24px 24px; max-height: 3000px; opacity: 1; border-top: 1px dashed var(--border); margin-top: 4px; padding-top: 16px; }
+        .faq-a p { color: var(--text-light); font-size: 0.95rem; line-height: 1.7; margin-bottom: 12px; }
+        .faq-a p:last-child { margin-bottom: 0; }
+        .faq-a ul { padding-left: 20px; color: var(--text-light); font-size: 0.95rem; margin-bottom: 12px; }
+        .faq-a li { margin-bottom: 8px; }
+        /* Team */
+        .team-member { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .team-member:last-child { border-bottom: none; }
+        /* Footer */
+        .footer { text-align: center; padding: 48px 20px; color: var(--text-light); font-size: 14px; border-top: 1px solid var(--border); margin-top: 48px; display: none; }
+        .section#thanks.active ~ .footer { display: block; }
+        /* Page nav */
+        .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .page-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 99px; background: #fff; color: var(--text); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); font-size: 15px; font-weight: 600; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-decoration: none; }
+        .page-nav a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); color: var(--accent); border-color: rgba(255, 92, 63, 0.3); }
+        
+        .page-nav .prev::before { content: '←'; color: var(--text-light); transition: color 0.3s; }
+        .page-nav a:hover.prev::before { color: var(--accent); }
+        .page-nav .next::after { content: '→'; color: var(--text-light); transition: color 0.3s; }
+        .page-nav a:hover.next::after { color: var(--accent); }
+        .page-nav .spacer { flex: 1; }
+        /* Language switch */
+        .lang-switch { padding: 16px 24px; border-top: 1px solid var(--border); margin-top: 12px; }
+        .lang-switch a { display: block; padding: 8px 14px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 13px; text-align: center; transition: all 0.2s; }
+        .lang-switch a:hover { background: var(--accent-soft); color: var(--accent); }
+        /* Mobile toggle */
+        .mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: var(--card); border-bottom: 1px solid var(--border); z-index: 200; padding: 0 16px; align-items: center; gap: 12px; }
+        .menu-btn { width: 36px; height: 36px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; background: none; border: none; }
+        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 1px; transition: all 0.3s; }
+        .mobile-header .logo-text { font-size: 15px; font-weight: 600; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; }
+        /* Good event card */
+        .event-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 12px 0; }
+        .event-date { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+        .event-text { font-size: 14px; }
+        /* Quote block */
+        .quote-block { background: linear-gradient(135deg, #fff8f0, #fff0ed); border-left: 3px solid var(--accent); padding: 20px 24px; border-radius: 0 12px 12px 0; margin: 20px 0; font-style: italic; }
+        @media (max-width: 768px) {
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); padding-top: 60px; }
+            .overlay.open { display: block; }
+            .main { margin-left: 0; padding: 72px 32px 60px; }
+            .section h1 { font-size: 1.65em; }
+            .section h2 { font-size: 1.2em; }
+        }
+        /* Reduce excessive spacing from VuePress br tags */
+        br + br { display: none; }
+
+        /* New Aesthetics */
+        .hero-card { padding: 40px 32px; border-radius: 28px; background: radial-gradient(circle at top right, rgba(255, 200, 120, 0.15), transparent 60%), var(--card); border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(116, 72, 23, 0.05); margin-bottom: 24px; text-align: center; }
+        .hero-card h1 { border-bottom: none !important; margin: 0 0 12px !important; font-size: 2.2rem !important; }
+        .hero-emoji { font-size: 3.5rem; margin-bottom: 8px; line-height: 1; display: block; }
+        .section-card { padding: 32px; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: 0 12px 30px rgba(116, 72, 23, 0.03); margin-bottom: 24px; }
+        .feature-grid { display: grid; gap: 16px; margin: 20px 0; }
+        .feature-item { padding: 20px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); display: flex; gap: 16px; align-items: flex-start; transition: transform 0.2s; }
+        .feature-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(116, 72, 23, 0.06); }
+        .feature-item .emoji { font-size: 1.8rem; line-height: 1; margin-top: 2px; }
+        .feature-item div strong { display: block; margin-bottom: 4px; font-size: 1.05rem; color: var(--text); }
+        .feature-item div p { margin: 0 !important; color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+        
+        /* Share Section Styles */
+        .section-card h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); font-size: 0.82rem; font-weight: 700; flex-shrink: 0; margin-right: 8px; }
+        .reward-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-bottom: 16px; }
+        .reward-table td { padding: 14px 16px; border-radius: 16px; font-size: 0.98rem; }
+        .reward-table tr td:first-child { background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); font-weight: 600; color: var(--text); border-right: none; border-radius: 16px 0 0 16px; }
+        .reward-table tr td:last-child { background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); border-left: none; border-radius: 0 16px 16px 0; color: var(--accent-strong); font-weight: 700; }
+        .reward-notes { color: var(--text-light); font-size: 0.9rem; padding-left: 0; list-style: none; }
+        .reward-notes li { padding: 3px 0; }
+        .reward-notes li::before { content: "· "; color: var(--gold); font-weight: 700; }
+        .step { padding: 18px 20px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); margin: 12px 0; }
+        .step-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 700; margin-right: 8px; }
+        .step p { margin: 8px 0 0; color: var(--text-light); font-size: 0.95rem; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); font-size: 0.82rem; font-weight: 600; }
+        .platform-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .platform { padding: 6px 14px; border-radius: 12px; background: var(--gold-soft); border: 1px solid var(--gold-border); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .email-box { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-radius: 16px; background: var(--accent-soft); margin: 12px 0; font-size: 0.95rem; transition: background 0.2s; color: var(--text) !important; text-decoration: none !important; border: none !important; }
+        .email-box:hover { background: #ffd6c4; text-decoration: none; }
+        .email-addr { font-weight: 700; color: var(--accent-strong); }
+        .email-format { margin: 10px 0; padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); font-size: 0.88rem; color: var(--text-light); word-break: break-all; }
+        .email-format code { display: block; margin-top: 4px; color: var(--text); font-family: inherit; font-weight: 600; font-size: 0.92rem; }
+        .inspiration-grid { display: grid; gap: 10px; }
+        .inspiration-item { padding: 16px 18px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); transition: transform 0.2s, box-shadow 0.2s; }
+        .inspiration-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(116, 72, 23, 0.06); }
+        .inspiration-item .emoji { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+        .inspiration-item strong { display: block; margin-bottom: 4px; font-size: 0.98rem; color: var(--text); }
+        .inspiration-item span { color: var(--text-light); font-size: 0.9rem; }
+        .standards-list { padding-left: 0; list-style: none; color: var(--text-light); font-size: 0.95rem; margin-top: 0; }
+        .standards-list li { padding: 6px 0 6px 20px; position: relative; }
+        .standards-list li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+        .contact-card { display: flex; align-items: center; gap: 20px; padding: 24px; border-radius: 24px; background: linear-gradient(135deg, var(--accent-soft), #fffcf9); border: 1px solid var(--border); }
+        .contact-card img { width: 100px; height: 100px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        @media (min-width: 600px) { 
+            .feature-grid { grid-template-columns: repeat(2, 1fr); } 
+            .inspiration-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    
+        
+        .co-creator-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255, 92, 63, 0.1), rgba(255, 92, 63, 0.03));
+            color: var(--accent-strong);
+            padding: 6px 18px;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 92, 63, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 92, 63, 0.05);
+        }
+
+        /* Lockscreen Gallery Masonry */
+        .lockscreen-gallery {
+            column-count: 2;
+            column-gap: 16px;
+            margin: 32px 0;
+        }
+        @media (min-width: 768px) {
+            .lockscreen-gallery { column-count: 3; }
+        }
+        @media (min-width: 1024px) {
+            .lockscreen-gallery { column-count: 4; }
+        }
+        .lockscreen-item {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .lockscreen-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .lockscreen-item img {
+            width: 100%;
+            display: block;
+        }
+        .lockscreen-author {
+            padding: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            cursor: zoom-out;
+        }
+        .lightbox.show {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox img {
+            max-width: 95vw;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            object-fit: contain;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .lightbox.show img {
+            transform: scale(1);
+        }
+        /* Make content images clickable */
+        main img {
+            cursor: zoom-in;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        main img:hover {
+            filter: brightness(0.95);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile header -->
+    <div class="mobile-header">
+        <button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <span class="logo-text">好事发生和她的朋友们</span>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/friend/logo.png" alt="好事发生">
+                <span>好事发生和她的朋友们</span>
+            </div>
+            <nav>
+                <div class="nav-group">
+                    <a class="nav-item active" href="#hello">🌟 嗨，我的朋友</a>
+                </div>
+                <div class="nav-group">
+                    <a class="promo-btn" href="#share">🎁 成为好事传播官</a>
+                    <a class="promo-btn" href="#shequn" style="background: linear-gradient(135deg, var(--gold-soft), #fffdf9); color: var(--gold); border-color: var(--gold-border);">🏡 加入好事社群</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">设计理念</div>
+                    <a class="nav-item" href="#qingshu">好事情书📚</a>
+                    <a class="nav-item" href="#story">开发故事</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">探索功能</div>
+                    <a class="nav-item" href="#starmap">好事星图</a>
+                    <a class="nav-item" href="#lockscreen">锁屏艺术</a>
+                    <a class="nav-item" href="#review">随机回顾</a>
+                    <a class="nav-item" href="#bracelet">幸运手环</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">用法范例</div>
+                    <a class="nav-item" href="#family">家庭日记</a>
+                    <a class="nav-item" href="#growth">成长反思</a>
+                    <a class="nav-item" href="#moment">美丽时刻</a>
+                    <a class="nav-item" href="#celebrate">为每一件小事庆祝</a>
+                    <a class="nav-item" href="#love">恋爱日志</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">服务与支持</div>
+                    <a class="nav-item" href="#faq">常见问题</a>
+                    <a class="nav-item" href="#thanks">特别感谢</a>
+                </div>
+            </nav>
+            <div class="lang-switch"><a href="friend-en.html">English Version</a></div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+
+
+            <section class="section" id="hello">
+                <div class="hero-card">
+                    <span class="hero-emoji">👋</span>
+                    <h1 id="嗨-我的朋友">嗨，我的朋友</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">“好事发生”是为你专门记录好消息的软件。我们相信好消息拥有着神奇引力，关注美好的人会获得更多美好。</p>
+                </div>
+
+                <div class="section-card">
+                    <p>开心的事情让你沉浸，忘记时间，但是它比起坏消息来说太容易被人忘记，所以把它们及时记录下来就显得格外必要。</p>
+                    <p><strong>「人的烦恼太多，是因为记性太好。」</strong>但记录好事，可以帮助我们不陷于无限循环无穷无尽的自我否定，提升幸福感和自信心。不管只是像吃到了喜欢吃的东西这样平凡的幸福，还是拿奖升职加薪这样的高光时刻，都值得被记录并反复记起。</p>
+                    <p>聪明又温柔的人，总是能留意到人生中那些闪闪发光的日子，用生活的美好和善意，点燃驱散人生寒意的篝火。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0; border-bottom: none; padding-bottom: 0;">为什么你需要好事发生？</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <div class="emoji">🎈</div>
+                            <div>
+                                <strong>它非常轻</strong>
+                                <p>专门为记录好消息而生的小小花园，工作文档、todo提醒，统统与此无关。</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="emoji">⚡</div>
+                            <div>
+                                <strong>简单便捷</strong>
+                                <p>查看或记录在3秒内完成。一键定位此刻，不错过每一瞬间的幸福感受。</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="emoji">🌸</div>
+                            <div>
+                                <strong>清新美貌</strong>
+                                <p>我们呈现给你清新简单的界面，赏心悦目，让你更有记录生活美好的动力。</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="emoji">🛡️</div>
+                            <div>
+                                <strong>绝对纯净</strong>
+                                <p>没有广告，没有社区，只属于你。你的快乐存钱罐，最隐秘的赛博避风港。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <p>愿君多采撷。在好事发生里，珍藏人生的美好回忆。人生需要好事，一起让好事发生。</p>
+                    <p style="margin-bottom: 0; color: var(--text-light); font-size: 0.95em;">每一个好事发生的用户都是我们的好朋友。如果你想加入我们的用户群，看大家的好事 & 夸夸，你可以在微博、即刻、小红书、豆瓣找到我们，所有地方都叫 <strong>@好事发生App</strong>。</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px; background: linear-gradient(135deg, #fffcf9, var(--accent-soft)); border: 1px solid rgba(255, 92, 63, 0.15); border-radius: 20px; padding: 32px 24px; box-shadow: 0 8px 24px rgba(255, 92, 63, 0.05);">
+                    <div style="font-size: 2.8rem; margin-bottom: 12px; line-height: 1;">🎁</div>
+                    <h3 style="margin: 0 0 8px; color: var(--accent-strong); font-size: 1.3rem; border-bottom: none; padding-bottom: 0;">把这份美好传递给更多人</h3>
+                    <p style="color: var(--text-light); font-size: 0.95em; margin-bottom: 20px;">分享你的“好事发生”使用方式，即可免费领取最高终身会员奖励。</p>
+                    <a href="#share" onclick="showSection('share'); return false;" style="display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: 99px; font-weight: 600; font-size: 1.05rem; text-decoration: none; border: none; box-shadow: 0 4px 12px rgba(255, 92, 63, 0.3); transition: transform 0.2s;">
+                        去看看怎么领 <span style="margin-left: 6px; font-size: 1.2em;">→</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section" id="share">
+                <div class="hero-card" style="padding-top: 48px;">
+                    <span class="hero-emoji">✨</span>
+                    <h1 id="分享赢会员">分享你的好事发生<br>获得好事发生会员</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">你记录的每一件好事，都值得被看见。<br>分享你的使用方式，让更多人发现生活中的美好。</p>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">一</span> 奖励规则</h2>
+                  <table class="reward-table">
+                    <tr>
+                      <td>帖子点赞 10 以上</td>
+                      <td>🎁 月度会员</td>
+                    </tr>
+                    <tr>
+                      <td>帖子点赞 30 以上</td>
+                      <td>🎁 年度会员</td>
+                    </tr>
+                    <tr>
+                      <td>帖子点赞 100 以上</td>
+                      <td>🎁 永久会员</td>
+                    </tr>
+                  </table>
+                  <ul class="reward-notes">
+                    <li>每位用户最多兑换一次，按达成的最高档发放</li>
+                    <li id="platform-text">iOS 与 Android 用户均可参与</li>
+                    <li>奖励将在 10 个工作日内发放</li>
+                    <li><span style="color: var(--accent-strong);">⚠️ 本次为限时福利活动，未来兑换门槛可能会提高哦</span></li>
+                  </ul>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">二</span> 参与方式</h2>
+                  <p style="color: var(--text-light); margin: 0 0 12px; font-size: 0.95rem;">只需 2 步：</p>
+
+                  <div class="step">
+                    <span class="step-num">1</span>
+                    <strong style="color: var(--text);">生成好事分享图、截图、录屏或写下你的使用感受</strong>
+                    <p>发布到以下任一平台：</p>
+                    <div class="platform-list">
+                      <span class="platform">小红书</span>
+                      <span class="platform">抖音</span>
+                      <span class="platform">B站</span>
+                      <span class="platform">视频号</span>
+                    </div>
+                    <p>请带上话题：</p>
+                    <div class="tag-list">
+                      <span class="tag">#好事发生</span>
+                      <span class="tag">#好事发生app</span>
+                      <span class="tag">#好事发生App</span>
+                    </div>
+                  </div>
+
+                  <div class="step">
+                    <span class="step-num">2</span>
+                    <strong style="color: var(--text);">点赞达标后，发邮件领取奖励</strong>
+                    <a class="email-box" href="mailto:goodhappens@163.com?subject=%E3%80%90%E5%A5%BD%E4%BA%8B%E4%BC%A0%E6%92%AD%E5%AE%98%E3%80%91%E5%B9%B3%E5%8F%B0%20%2F%20%E7%94%A8%E6%88%B7%E5%90%8D%20%2F%20%E7%82%B9%E8%B5%9E%E6%95%B0%20%2F%20Android%E6%88%96iOS">
+                      <span class="email-icon">📮</span>
+                      <span class="email-addr">goodhappens@163.com</span>
+                    </a>
+                    <div class="email-format">
+                      邮件标题格式：
+                      <code>【好事传播官】平台 / 用户名 / 点赞数 / Android或iOS</code>
+                    </div>
+                    <p>请附上：帖子截图 + 点赞数截图</p>
+                  </div>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">三</span> 内容灵感</h2>
+                  <p style="color: var(--text-light); margin: 0 0 12px; font-size: 0.95rem;">你可以分享：</p>
+                  <div class="inspiration-grid">
+                    <div class="inspiration-item">
+                      <span class="emoji">🌟</span>
+                      <strong>你的好事星图</strong>
+                      <span>晒出独一无二的好事宇宙，说说哪个星座最让你意外</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">📅</span>
+                      <strong>日历上的小柿子</strong>
+                      <span>好事越多，柿子越满——犒赏认真生活的自己</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">🧩</span>
+                      <strong>桌面小组件搭配</strong>
+                      <span>好事回顾组件和壁纸的搭配，展示你的桌面美学</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">📖</span>
+                      <strong>你的好事书</strong>
+                      <span>导出的好事书，是你送给自己的一本生活情书</span>
+                    </div>
+                    <div class="inspiration-item" id="apple-watch-item">
+                      <span class="emoji">⌚</span>
+                      <strong>Apple Watch 幸运手环</strong>
+                      <span>一抬手就是一句温暖的话，随身携带好运</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">🌙</span>
+                      <strong>你的记录习惯</strong>
+                      <span>睡前记好事，给每一天画上句号。分享坚持后的变化</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">四</span> 审核标准</h2>
+                  <ul class="standards-list">
+                    <li>图文至少 3 张图，并附 30 字以上真实使用感受</li>
+                    <li>视频不少于 15 秒</li>
+                    <li>内容需展示好事发生 App 界面（有正常使用痕迹）</li>
+                    <li>避免出现兑换码、互赞互关等内容</li>
+                    <li>点赞数以提交审核时的截图为准</li>
+                    <li>兑换成功后帖子需保持公开可见</li>
+                  </ul>
+
+                  <div style="background: linear-gradient(135deg, #fffcf9, var(--accent-soft)); padding: 24px; border-radius: 20px; border: 1px solid rgba(239, 217, 200, 0.9); margin-top: 24px; text-align: center;">
+                    <p style="color: var(--text-light); font-size: 0.95em; line-height: 1.8; font-style: italic; margin: 0;">记录好事，是在培养自己快乐的能力。<br><br>
+                    "洗一个澡，看一朵花，吃一顿饭，<br>
+                    假使你觉得快活，并非全因为澡洗得干净，<br>
+                    花开得好，或者菜合你口味，<br>
+                    主要因为你心上没有挂碍。"</p>
+                    <div style="margin-top: 12px; font-style: normal; font-size: 0.85rem; color: var(--gold); font-weight: 600;">—— 钱钟书</div>
+                  </div>
+                </div>
+                
+                <div style="text-align: center; color: var(--text-light); font-size: 0.85rem; padding: 20px 0;">
+                    <span id="apple-disclaimer">本活动由好事发生独立发起和运营，与 Apple Inc. 无关。</span>
+                </div>
+            </section>
+
+            <section class="section" id="shequn">
+                <div class="hero-card">
+                    <span class="hero-emoji">🏡</span>
+                    <h1 id="好事社群">好事社群</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">每一个好事发生的用户都是我们的好朋友。</p>
+                </div>
+
+                <div class="section-card">
+                    <p>好事发生App没有后台和社群，只在微信开设了「好事发生用户群」。如果你想看大家的好事&夸夸，或者找到更多“好朋友”，非常欢迎你的加入。</p>
+                    
+                    <div class="contact-card" style="margin: 24px 0; justify-content: center; text-align: center;">
+                        <div>
+                            <strong style="display: block; font-size: 1.15rem; margin-bottom: 8px;">添加开发者微信</strong>
+                            <div style="font-size: 1.4rem; font-weight: 700; color: var(--accent-strong); letter-spacing: 1px; margin-bottom: 8px;">aiwanglaoshi</div>
+                            <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">请备注 <strong>“好事发生”</strong></p>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-bottom: 0;">其他问题和建议也欢迎随时联系。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0; border-bottom: none; padding-bottom: 0;">官方平台账号</h2>
+                    <p>你也可以在以下平台找到我们，我们每日精选用户投稿好事，放送好事日报。所有地方都叫 <strong>@好事发生App</strong>。</p>
+                    <div class="platform-list" style="margin-top: 16px;">
+                        <span class="platform" style="background: #fff; border-color: #eee;">微博</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">即刻</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">小红书</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">抖音</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">视频号</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">公众号</span>
+                    </div>
+                </div>
+
+                <div class="section-card" style="text-align: center; border: none; background: transparent; box-shadow: none;">
+                    <img src="images/friend/happy-B5DuZjQP.png" alt="祝你开心" style="width: 140px; margin: 0 auto 16px;">
+                    <p style="font-size: 1.1rem; color: var(--accent-strong); font-weight: 600;">祝你今天也快乐。</p>
+                    <p style="color: var(--text-light);">我们的官网：<a href="https://goodhappens.app" target="_blank" rel="noopener noreferrer">goodhappens.app</a></p>
+                </div>
+            </section>
+
+                        <section class="section" id="qingshu">
+                <div class="hero-card" style="background: linear-gradient(135deg, var(--accent-soft), #fffdf9);">
+                    <span class="hero-emoji">💌</span>
+                    <h1 id="好事情书📚" style="border-bottom: none; margin-bottom: 12px; font-size: 2.2rem;">致朋友的一封信</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">这是一封写给你的好事情书。</p>
+                </div>
+
+                <div class="section-card" style="text-align: center; padding: 48px 32px;">
+                    <p style="font-size: 1.15rem; color: var(--text); line-height: 2; margin-bottom: 24px;">
+                        人生有很多不应该被忽略的好事，<br>一点一滴都是我们珍贵的幸福感来源。<br>这正是“好事发生”的设计初衷。
+                    </p>
+                    
+                    <div class="quote-block" style="text-align: left; margin: 32px auto; max-width: 32rem; background: var(--card); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(116, 72, 23, 0.05); border-left: 4px solid var(--accent); border-radius: 12px;">
+                        <p style="font-size: 1.05rem; margin: 0; color: #555; line-height: 1.8;">「人的烦恼太多，是因为记性太好。」<br><br>但记录好事，可以帮助我们不陷于无限循环的自我否定，提升幸福感和自信心。</p>
+                    </div>
+
+                    <p style="font-size: 1.05rem; color: var(--text-light); line-height: 1.8; margin-bottom: 32px;">
+                        不管只是像吃到了喜欢吃的东西这样平凡的幸福，<br>还是拿奖、升职、加薪这样的高光时刻，<br>都值得被记录并反复记起。
+                    </p>
+
+                    <div style="background: var(--gold-soft); border: 1px solid var(--gold-border); padding: 24px; border-radius: 20px; display: inline-block; text-align: left;">
+                        <p style="margin: 0; color: var(--gold); font-size: 1.05rem; font-weight: 500; line-height: 1.8;">
+                            ✨ 希望好事发生的存在能帮助你发现更多生活的美好，<br>
+                            ✨ 希望世间的温柔能给予你慰藉和热爱生活的动力。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="story">
+                <div class="hero-card">
+                    <span class="hero-emoji">👩‍💻</span>
+                    <h1 id="开发故事">开发故事</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">了解“好事发生”是从何而来的</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="设计初衷" style="margin-top: 0;">设计初衷</h2>
+                    <p>你好，我是好事发生App的开发者<strong>王梦珂</strong>。</p>
+                    <p>总被人问我为什么看起来这么积极，我想说我不一定时时快乐，但幸福一定需要学习。</p>
+                    <p>之前跟大家分享过我对抗抑郁的方法：为了对抗负面情绪，不陷入无限循环的自我PUA，我坚持记录开心的事情，并且抑郁的时候看。</p>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0;">但我一直没有发现什么好用的记录工具。在过去，我用笔记软件开文档写，不趁手，也不好看。同时还会出现各种各样的问题：比如被我手滑删掉了，光标放错位置，文件同步出问题，也显得没有那么有仪式感，等等。<br><br><strong style="color: var(--text);">于是我自己做了一个。</strong></p>
+                    </div>
+                    <p>“好事发生”是为你专门记录好消息的软件。我们相信多看好消息，就会发生好消息，这就是神奇的<strong>好消息聚集效应</strong>。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="创作背后" style="margin-top: 0;">创作背后</h2>
+                    <p>「好事发生」是我的 night job，跟 day job 分开，和上班毫无关系。是一个我真正想做的需求，为自己做的需求，为“人”做的需求。</p>
+                    <p>在我看来这是一个真正的作品，产品经理应该为“人”做需求。<strong style="color: var(--accent-strong);">好的创作不是表达自己，而是构造世界。</strong>我搞了一个小世界出来。</p>
+                    <p>这很不容易。其实文档很早就写完了，中间我又改需求，希望它尽善尽美，为人所用。然后中间工程师考驾照，我也认为考驾照非常重要，支持他考驾照。</p>
+                    <p>谢谢我的工程师和设计师没有因为我的絮叨打我，不过他们都很专业，对于产品经理就是会改需求这件事已经很习惯了。大家认认真真，付出几乎所有的业余时间。我们都不是来玩的。</p>
+                    <p>对了，「好事发生」的工程师痘师傅同时是一名乐手，中间忙于排练，也耽误了一些排期。</p>
+                    <p>总的来说，因为这样那样的原因，这个App的上线时间就比预期时间晚了一些，跟我的工程师的演出一样，莫名其妙地被疫情耽搁了。</p>
+                    
+                    <div style="background: var(--accent-soft); padding: 20px 24px; border-radius: 16px; margin: 24px 0;">
+                        <p style="margin: 0 0 12px; color: var(--accent-strong); font-weight: 600;">现在，痘师傅的驾照已经下来了，演出举办得也很顺利。</p>
+                        <p style="margin: 0; color: var(--text);">从 0 到 1，花了半年。它牺牲了我很多做别的事情的时间，我不能玩，要少睡觉，但它被很多人喜欢，这比好还好。</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="上线与荣誉" style="margin-top: 0;">上线与荣誉</h2>
+                    <p><strong>2022年9月5日，「好事发生」正式上线。</strong></p>
+                    <img src="images/friend/1-BtnLGAwX.webp" alt="上线" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border);">
+                    
+                    <div style="margin-top: 32px;">
+                        <p><strong>9月6日（上线次日）即被 PriceTag 推荐：</strong><br><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTIwNTI5Nw==&amp;mid=2247511611&amp;idx=1&amp;sn=82be477c014b3e307798573dc7ccb01c&amp;scene=21#wechat_redirect" target="_blank" rel="noopener noreferrer">⁹/₆ PriceTag 应用日报推荐应用：好事发生</a></p>
+                    </div>
+
+                    <div style="margin-top: 32px;">
+                        <p><strong>2022年9月23日，荣获 App Store 中国大陆编辑推荐 App：</strong></p>
+                        <img src="images/friend/2-DTbQwa4t.webp" alt="获奖" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border);">
+                    </div>
+
+                    <div style="margin-top: 32px; padding-top: 24px; border-top: 1px dashed var(--border);">
+                        <p style="font-size: 1.05rem; color: var(--text);">感谢所有支持和帮助过我们的人，感谢我的工程师 <strong>痘师傅</strong> 和我的设计师 <strong>大Q</strong>，谢谢你们的信任，还好我们坚持了下来，好事发生 Goodhappens，好事发生了。</p>
+                        <p style="color: var(--text-light);">目前，好事发生仍在以一个月至少发一个新版本的节奏更新新功能、新主题，希望带给你更好的使用体验，步履不停。<br>把开心的事情写下来吧，就从今天开始。</p>
+                        <img src="images/friend/3-CwVe72TU.webp" alt="写" style="border-radius: 16px; max-width: 100%; margin-top: 16px; border: 1px solid var(--border);">
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="starmap">
+                <div class="hero-card">
+                    <span class="hero-emoji">✨</span>
+                    <h1 id="好事星图">好事星图</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">你的好事，正在发光</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="星图上线" style="margin-top: 0;">点亮你的专属星系</h2>
+                    <p>我们给好事发生做了一个新功能：「<strong>好事星图</strong>」。</p>
+                    <p>它会帮你，将记录下来的好事，变成夜空中一颗颗闪亮的星。</p>
+                    <p>每一条记录，都会成为一颗星；每一种快乐，都会连成自己的星座。</p>
+                    
+                    <img src="images/friend/starmap_1.jpeg" alt="好事星图展示" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;" onclick="openLightbox(this.src)">
+
+                    <p>有些星星来自一次完成。有些星星来自一顿好吃的饭。有些星星来自朋友的陪伴、陌生人的善意，或者某个终于松了一口气的晚上。</p>
+                    <p style="color: var(--text-light); font-style: italic;">“它们散落在日子里。被写下来的时候，只是一句话。”</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="星星的回响" style="margin-top: 0;">每颗星星都有回响</h2>
+                    <p>当它们在星图里亮起来，你会看到另一种答案：<strong>你的快乐清晰可寻。</strong></p>
+                    
+                    <img src="images/friend/starmap_2.jpeg" alt="每颗星星都有回响" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;" onclick="openLightbox(this.src)">
+                    <img src="images/friend/starmap_3.jpeg" alt="重新看见好事" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;" onclick="openLightbox(this.src)">
+
+                    <p>我们做这个功能，是想让那些小小的好事不只是被记录，也能被重新看见。</p>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0; color: var(--text);">因为好事不一定要很大。<br><br>可以是“<strong>今天没有放弃</strong>”。<br>可以是“<strong>我被好好对待了</strong>”。<br>可以是“<strong>普通的一天，也有一点点亮</strong>”。</p>
+                    </div>
+
+                    <div style="background: var(--accent-soft); padding: 20px 24px; border-radius: 16px; margin: 32px 0 0 0; text-align: center;">
+                        <p style="margin: 0 0 12px; font-weight: 600;">想了解更多关于「好事星图」的开发故事与彩蛋？</p>
+                        <a href="https://mp.weixin.qq.com/s/JwapYURdQni5968lMNkqfw" target="_blank" rel="noopener noreferrer" class="weui-btn weui-btn_primary" style="display: inline-block; padding: 12px 32px; border-radius: 24px; background: var(--accent-strong); color: #fff; text-decoration: none; font-weight: bold; transition: all 0.3s ease;">
+                            🌟 阅读完整文章：你的好事，正在发光
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="lockscreen">
+                <div class="hero-card">
+                    <span class="hero-emoji">🎨</span>
+                    <h1 id="锁屏艺术">锁屏艺术</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">🌟好事发生App「锁屏艺术」特展</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="成为锁屏艺术家" style="margin-top: 0;">成为锁屏艺术家</h2>
+                    <p>有这么一群人，我愿意称之为：</p>
+                    <p style="text-align:center;font-size:24px;letter-spacing:8px;font-weight:700;margin:24px 0;color:var(--text);">锁 屏 艺 术 家</p>
+                    <p>具体来说，就是把好事发生App的锁屏小组件放在锁屏上的人。</p>
+                    <div style="background: var(--accent-soft); padding: 20px 24px; border-radius: 16px; margin: 24px 0;">
+                        <p style="margin: 0 0 12px; font-weight: 600;">放置方法：</p>
+                        <p style="margin: 0; color: var(--text);">长按锁屏，点击弹出的空白框指示，点击添加小组件，选择“好事发生”。（共8种样式，我猜每个你都喜欢）</p>
+                    </div>
+                    <img src="images/friend/1-CxnGIMPA.webp" alt="添加组件" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border);">
+                </div>
+
+                <div class="section-card">
+                    <h2 id="艺术家作品展" style="margin-top: 0;">艺术家作品展</h2>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0;"><strong>Ta说：</strong>即便短暂换了壁纸，也不会动小组件，看到就感觉是个好彩头。<br><strong>Ta说：</strong>为了打开它，使劲找角度也要发现好事！<br><strong>Ta说：</strong>字体好港风啊谁懂我的审美……感觉像是那种会让人吃得很开心的小店，里面卖叉烧包和厚多士……</p>
+                    </div>
+                    <p>让我们一起欣赏，锁屏艺术家们的伟大作品吧！🎉</p>
+                    <div class="lockscreen-gallery">
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_02.jpg" loading="lazy" alt="锁屏艺术 - Amazing">
+        <div class="lockscreen-author">来自好朋友：Amazing</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_03.jpg" loading="lazy" alt="锁屏艺术 - longer">
+        <div class="lockscreen-author">来自好朋友：longer</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_04.jpg" loading="lazy" alt="锁屏艺术 - 因为我是忍者来的">
+        <div class="lockscreen-author">来自好朋友：因为我是忍者来的</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_05.jpg" loading="lazy" alt="锁屏艺术 - 韩丹">
+        <div class="lockscreen-author">来自好朋友：韩丹</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_06.jpg" loading="lazy" alt="锁屏艺术 - Emma傅">
+        <div class="lockscreen-author">来自好朋友：Emma傅</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_07.jpg" loading="lazy" alt="锁屏艺术 - 早睡的TiZi">
+        <div class="lockscreen-author">来自好朋友：早睡的TiZi</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_08.jpg" loading="lazy" alt="锁屏艺术 - Alsa">
+        <div class="lockscreen-author">来自好朋友：Alsa</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_09.jpg" loading="lazy" alt="锁屏艺术 - Green Day">
+        <div class="lockscreen-author">来自好朋友：Green Day</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_10.jpg" loading="lazy" alt="锁屏艺术 - 李小龙">
+        <div class="lockscreen-author">来自好朋友：李小龙</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_11.jpg" loading="lazy" alt="锁屏艺术 - Ethen">
+        <div class="lockscreen-author">来自好朋友：Ethen</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_12.jpg" loading="lazy" alt="锁屏艺术 - 阿醒">
+        <div class="lockscreen-author">来自好朋友：阿醒</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_13.jpg" loading="lazy" alt="锁屏艺术 - 🍑">
+        <div class="lockscreen-author">来自好朋友：🍑</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_14.jpg" loading="lazy" alt="锁屏艺术 - 彭琨">
+        <div class="lockscreen-author">来自好朋友：彭琨</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_15.jpg" loading="lazy" alt="锁屏艺术 - 卡西">
+        <div class="lockscreen-author">来自好朋友：卡西</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_16.jpg" loading="lazy" alt="锁屏艺术 - yang.">
+        <div class="lockscreen-author">来自好朋友：yang.</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_17.jpg" loading="lazy" alt="锁屏艺术 - 二三没有言">
+        <div class="lockscreen-author">来自好朋友：二三没有言</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_18.jpg" loading="lazy" alt="锁屏艺术 - 小陈">
+        <div class="lockscreen-author">来自好朋友：小陈</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_19.jpg" loading="lazy" alt="锁屏艺术 - 镇长">
+        <div class="lockscreen-author">来自好朋友：镇长</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_20.jpg" loading="lazy" alt="锁屏艺术 - 高管">
+        <div class="lockscreen-author">来自好朋友：高管</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_21.jpg" loading="lazy" alt="锁屏艺术 - xq.cheng">
+        <div class="lockscreen-author">来自好朋友：xq.cheng</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_22.jpg" loading="lazy" alt="锁屏艺术 - 大雄">
+        <div class="lockscreen-author">来自好朋友：大雄</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_23.jpg" loading="lazy" alt="锁屏艺术 - 胡图图不糊涂">
+        <div class="lockscreen-author">来自好朋友：胡图图不糊涂</div>
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/lockscreen/lockscreen_24.jpg" loading="lazy" alt="锁屏艺术 - Alysa">
+        <div class="lockscreen-author">来自好朋友：Alysa</div>
+    </div>
+</div>
+
+
+                </div>
+
+                <div class="section-card">
+                    <h2 id="救自己" style="margin-top: 0;">每天都有好事发生</h2>
+                    <p>「我很擅长自己救自己」，我们的好朋友Joyce说。 整理房间，打扫卫生，丢掉垃圾。 记录下这些时刻。每一次打开好事发生App，都是自己救自己。好事发生：<a href="https://mp.weixin.qq.com/s?__biz=MzYzMTE1ODg4OQ==&mid=2247484841&idx=1&sn=2b58ef1f7a4444f967eee277075e5b55&source=41&poc_token=HMFi_Wmjc1p5jQrF82u-Dk_2Rs9Ce6wX6prENTrn" target="_blank" rel="noopener noreferrer">走进你的心里，埋下快乐的种子</a></p>
+                    <img src="images/friend/image-CiJZA3oE.png" alt="救自己" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    <p>生活的大艺术家，你的每一件好事都十分珍贵。祝你每天都能感到幸福，每天都有好事发生。🌠</p>
+                </div>
+            </section>
+
+            <section class="section" id="review">
+                <div class="hero-card">
+                    <span class="hero-emoji">🎲</span>
+                    <h1 id="随机回顾">随机回顾</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">🌟人就是一瞬间顿悟，一瞬间被抚慰</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="发现彩蛋" style="margin-top: 0;">发现生活的小彩蛋</h2>
+                    <p>大家好，我是好事发生App的王梦珂。</p>
+                    <p>今天跟大家分享一个早已上线但被很多人忽略的功能：<strong>好事随机回顾。</strong></p>
+                    <p>我手机桌面长期放俩好事发生App的小组件，一个是当下最新好事，一个是好事随机回顾。</p>
+                    <img src="images/friend/1-BCnLUVY5.webp" alt="桌面组件" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0;">就像线性变化使事物具备了预测的可能，但非线性变化才是世界的常态。就我个人的体验来讲，很多事都不是计划性的，根本没法按计划进行，尤其像「获得安慰」这种事。<br><br><strong>人就是一瞬间顿悟，一瞬间被抚慰。看到的一瞬间，突然被打动。</strong></p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="跨越时空的温暖" style="margin-top: 0;">跨越时空的温暖</h2>
+                    <p>刚才看到随机回顾的这条，一下就把我拉回了当时记录这条好事的时刻。非常温暖，读的时候嘴角是上扬的，心情也随之变得好好：</p>
+                    <img src="images/friend/2-Be6ccgfJ.webp" alt="回顾瞬间" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    <p>发生过的好事就是人生地图里的小小彩蛋，记录它就是在埋彩蛋，总有一天又会重逢。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="设置随机回顾" style="margin-top: 0;">设置随机回顾</h2>
+                    <p>特别建议大家也设置这个小组件。好事随机回顾小组件每个小时都会自动刷新，点击之后会立即刷新。</p>
+                    <img src="images/friend/3-Cq3O_Oky.webp" alt="设置说明" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    <div style="background: var(--gold-soft); border: 1px solid var(--gold-border); padding: 20px 24px; border-radius: 16px; margin-top: 24px;">
+                        <p style="margin: 0; color: var(--gold); font-weight: 500; text-align: center;">祝你的生活充满阳光，祝你永远拥有 happy ending。 ✨</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="bracelet">
+                <div class="hero-card">
+                    <span class="hero-emoji">⌚</span>
+                    <h1 id="幸运手环">幸运手环</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">🌟好事发生做了个「幸运手环」</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="随身携带的幸运" style="margin-top: 0;">随身携带的幸运</h2>
+                    <p>影响心情的可能是匆匆一瞥的瞬间，也可能是偶然浮现的一句话，这些都在无法预料的未来里。</p>
+                    <p>但我们也收集了很多关于幸运和美好的句子，想要投放在每一个“只要你想，就能看见”的时刻。</p>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0;">所以我们在Apple Watch上做了个「幸运手环」，现在戴上手表，可以将你的幸运也随身携带。</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 16px; margin: 24px 0; overflow-x: auto; padding-bottom: 8px;">
+                        <img src="images/friend/1-BGq7o62Y.webp" alt="手环展示1" style="border-radius: 16px; max-width: 30%; border: 1px solid var(--border); object-fit: cover;">
+                        <img src="images/friend/2-CsbCUaU4.webp" alt="手环展示2" style="border-radius: 16px; max-width: 30%; border: 1px solid var(--border); object-fit: cover;">
+                        <img src="images/friend/3-ByuHgtQa.webp" alt="手环展示3" style="border-radius: 16px; max-width: 30%; border: 1px solid var(--border); object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="幸运展示区" style="margin-top: 0;">幸运展示区</h2>
+                    <p>希望美丽的句子能为你的生活带来不一样的色彩。如果你还没有你觉得幸运的瞬间，这里有可以为你带来好运的心情。</p>
+                    <p>也欢迎你在所有地方秀出你喜欢的「幸运手环」句子，让我们也看看，你喜欢的世界有多动人。💛</p>
+                    
+                    <div style="margin-top: 32px;">
+                        <div class="lockscreen-gallery">
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_01.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_02.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_03.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_04.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_05.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_06.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_07.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_08.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_09.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_10.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_11.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_12.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_13.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_14.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_15.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_16.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_17.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_18.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_19.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_20.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_21.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+    <div class="lockscreen-item">
+        <img src="images/friend/bracelet/bracelet_22.jpg" loading="lazy" alt="幸运手环展示">
+    </div>
+</div>
+
+<p>如果你还没有你觉得幸运的瞬间，这里有可以为你带来好运的心情。</p><p>也欢迎你在所有地方秀出你喜欢的「幸运手环」句子，让我们也看看，你喜欢的世界有多动人。💛</p><br>
+                    </div>
+                </div>
+
+                <div class="section-card" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);">
+                    <h2 id="vision-pro" style="margin-top: 0;">探索更多平台</h2>
+                    <p><strong>🌟 新平台 Vision Pro 已上线</strong></p>
+                    <p>你也可以在 Vision Pro 上下载好事发生，体验完全不同的沉浸式功能与空间计算下的“好事”魅力。</p>
+                </div>
+            </section>
+
+            <section class="section" id="family">
+                <div class="hero-card">
+                    <span class="hero-emoji">👨‍👩‍👦</span>
+                    <h1 id="家庭日记">家庭日记</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">👨‍👩‍👦 ｜ 🍼 ｜ 👶 ｜ 🏠 ｜ ❤️</p>
+                    <div class="co-creator-badge">🤝 特约共创好友：汉勤、Dora宝宝、老c</div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="好事发生的曼妙之处" style="margin-top: 0;">记录的曼妙之处</h2>
+                    <p>在于亲自使用、亲自搭建。好事是自己记录的，是自己人生中发生的真实之事。</p>
+                    <p>在这里记录的是令自己快乐的所有大事小事，可以是世俗的成功，是名和利，也可以是吃到好吃的东西，看到美丽的风景，又或者只一闪念：今天我也很认真地生活了。</p>
+                    <img src="images/friend/1-DQBENILp.webp" alt="图片1" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    <p style="text-align: center; color: var(--text-light); font-size: 0.9rem;">（by好朋友：Dora宝宝）</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="好事发生的诞生" style="margin-top: 0;">为所有人而生</h2>
+                    <p>这源自于我自己的记录好事的需求。我记录了，我改变了，我想要有一个更好的软件承载我的好事。</p>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0;">我也曾预想过用户画像。在上线之前，我只是依据一些对人类非常浅薄的了解推断：受众大概是「情感丰富的女大学生」之类吧。<br><br>事实证明，我对人类的了解还是太有限了。据统计，我们最小的活跃用户，是初中生朵朵，年纪最大的，是疼爱孙子的爷爷。</p>
+                    </div>
+                    <p>你可能也想不到：不少看起来相当「糙老爷们儿」的男用户，在群里亮出他好事发生App的日历页，硕果累累，天天打卡。</p>
+                    <img src="images/friend/2-DjTLTaiZ.webp" alt="图片2" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    <p style="text-align: center; color: var(--text-light); font-size: 0.9rem;">（by好朋友：老c的一天）</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="汉勤的故事" style="margin-top: 0;">汉勤的故事</h2>
+                    <p>我充分相信以及支持男性用户记录好事的必要性。他们记录好事，其实有着更深远的意义：</p>
+                    <ul>
+                        <li>不仅是对快乐的构建，对生活的热爱一次次重复夯实——记录好事还是相对而言不善表达的男性群体，给自己的一个说爱的机会，让心变得更柔软。</li>
+                    </ul>
+                    <p><strong>在好事群的男用户里，我对汉勤印象尤为深刻。</strong></p>
+                    <p>他的内容，永远以家为维度出现；他的文字，没有华丽的词藻，朴实到不能再朴实。但他会给他的每件好事，挑选一个可爱的emoji。</p>
+                    <p>我一直觉得，真正的热爱生活，不是在跟美妙事物相遇时，急着发到朋友圈，而是马上抱住你身边的亲人，爱人，还有小狗。</p>
+                    <img src="images/friend/3-DAskE21G.webp" alt="图片3" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    
+                    <div style="background: var(--accent-soft); padding: 20px 24px; border-radius: 16px; margin: 24px 0;">
+                        <p style="margin: 0 0 12px; font-weight: 600;">汉勤的儿子乐乐，几乎和好事发生App同时出生。</p>
+                        <p style="margin: 0 0 8px; color: var(--text);">我在整个过程里不仅「云养」了这个孩子，还看到了养一个孩子，更深远的意义：</p>
+                        <ul style="margin-bottom: 0;">
+                            <li>年轻的父母通过抚养他们的小孩，得以把自己再「养」一遍。</li>
+                            <li>全家三代人，因为一个新生命的诞生，又更紧更紧地连结在一起。</li>
+                            <li>有研究表明：在人生早期贮存了很多快乐记忆的人，相对于缺乏快乐记忆的人，更少抑郁，更加乐观，在陷入困境时更容易重拾信心。</li>
+                        </ul>
+                    </div>
+                    <p>我相信在这样的爱里长大的小孩，因为拥有了爱，拥有了快乐童年记忆，在他长大以后，得以拥有更强大的面对人生困难的勇气和底气。</p>
+                    <p>来自日常的神性，来自任何一种必要的生活。</p>
+                    <p style="font-weight: 600; color: var(--accent-strong);">「快乐的人生由每一个此刻组成」，是为好事发生。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0; margin-bottom: 24px;">汉勤的家庭日记</h2>
+                    <div style="padding-left: 16px; border-left: 2px solid var(--gold-soft);">
+                        <div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年9月12日星期一】</p><p>小宝预产期11月下旬，大姨子9月就寄来满满一包衣服，提前感受溢出的爱和幸福😆</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年9月24日星期六】</p><p>发现给小宝挑东西能提升幸福感😄</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年9月27日星期二】</p><p><img style="border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid var(--border);" src="images/friend/4-DY9mQQho.webp" alt="图片4"></p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年9月29日星期四】</p><p>23号体检120.7斤，今天120.3斤，我的宝体检之后饮食注意了许多 早晚运动每天8000步，用行动证明了长胎不长肉是可行的🥰</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月4日星期二】</p><p>小宝今天32周咯😘</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月6日星期四】</p><p>假期第六天 给小宝洗衣服😄</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月10日星期一】</p><p>晚上回去纳宁宝把我拉到沙发🛋️，不停的投喂面包牛奶，给我看今天买的卤味套装，拉着我吃柚子。略带责备的问我怎么回这么晚，等着下去散步呢🤩</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月13日星期四】</p><p>33周第2天，她说宝宝胎动力气比之前大了许多🥰</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月16日星期天】</p><p>老妈下周来深圳😋</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月20日星期四】</p><p>宝宝今儿34周，再有20天就足月啦😝</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年10月25日星期二】</p><p>外婆给带的老母鸡、板栗，老妈带的肉糕</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年11月3日星期四】</p><p>两位老妈一起陪产检，全家出动。 医生说一切顺利，宝宝大小适中。</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年11月20日星期天】</p><p>陪老婆锻炼了😆 38+5</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年11月25日星期五】</p><p>你妈昨晚又失眠了 是不是着急出来和我们见面啦😆</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年12月2日星期五】</p><p><img style="border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid var(--border);" src="images/friend/5-4M5ie8sN.webp" alt="图片5"></p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年12月3日星期六】</p><p>宝宝一次可以吃15ml啦😃13:30 下午</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年12月3日星期六】</p><p>宝宝睁开眼睛啦😆</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年1月7日星期六】</p><p>带娃满月体检 一切顺利🥰</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2022年1月7日星期六】</p><p><img style="border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid var(--border);" src="images/friend/6-BUtizg4H.webp" alt="图片6"></p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年1月27日星期五】</p><p>结婚一周年😍</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年1月28日星期六】</p><p><img style="border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid var(--border);" src="images/friend/7-sZfMJMT_.webp" alt="图片7"></p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年2月4日星期六】</p><p>满2月的宝宝👶</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年2月13日星期一】</p><p>三月中的宝宝 6.5kg， 62cm</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年2月16日星期四】</p><p>宝宝在怀里喝奶睡着啦😄</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年2月19日星期天】</p><p>“粑粑你看我的小拳头”😘</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年2月21日星期二】</p><p>对比小时候（两个月前）确实长大了诶🤩</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年3月19日星期天】</p><p>老妈为了给宝宝买奶粉 完成了第一次网购🥰</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年4月18日星期二】</p><p>乐乐第一次自己翻身啦🤩</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年5月27日星期六】</p><p>在怀里睡着😁</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年6月17日星期六】</p><p>我们吃饭，你在旁边玩，不吵不闹</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年6月20日星期二】</p><p>我在装围栏，奶奶抱着乐乐过来，乐乐笑出了声，还笑个不停😆 咱也不知道是看到我感到亲切，还是看到我在干活儿了笑的，开心就完事儿了呗😁</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年10月7日星期六】</p><p>刚给乐乐喂辅食，怎么都不吃我还以为是因为换了新辅食、颜色不一样“乐乐要你先尝尝烫不烫他再吃”，老妈说 我吃了一口，不烫，于是，乐乐很快的吃完了一整碗</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年10月27日星期五】</p><p>小家伙开始上厅堂😆</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年10月28日星期六】</p><p>第一次，带奶奶和乐乐吃海底捞 小家伙兴奋极了🤩</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年11月4日星期六】</p><p>小伙子自己吃东西收放自如了😊</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年11月10日星期五】</p><p>11个月8天，早上看到乐乐自己站起来走了 3步又坐下 奶奶说昨天就看到了😆</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2023年11月14日星期二】</p><p>早上看到乐乐从电视柜走到垫子上😄</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2024年1月1日星期一】</p><p>今天回家地铁上，一个哥哥，一个大叔，一个阿姨，一个爷爷给让座了，感恩</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2024年1月16日星期二】</p><p>晚上与崽视频(<em>&#39;ω&#39;</em>)</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2024年2月15日星期四】</p><p><img style="border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid var(--border);" src="images/friend/8-CydPb3Kn.webp" alt="图片8"></p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2024年2月24日星期六】</p><p>和奶奶玩耍，最亲的奶奶😘</p></div><div style='margin-bottom: 24px;'><p style='color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;'>【2024年3月16日星期六】</p><p>牵着我的手，玩来玩去</p><br></div>
+                    </div>
+                    
+                    <div style="background: var(--gold-soft); border: 1px solid var(--gold-border); padding: 20px 24px; border-radius: 16px; margin-top: 32px;">
+                        <p style="margin: 0; color: var(--gold); font-weight: 500; text-align: center;">以上是好事发生在汉勤's family。祝愿好事持续发生在汉勤家，乐乐健康长大，阖家欢乐。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="growth">
+                <div class="hero-card">
+                    <span class="hero-emoji">🌱</span>
+                    <h1 id="成长反思">成长反思</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">🌱 ｜ ✨ ｜ 📖 ｜ 🌸 ｜ 💪</p>
+                    <div class="co-creator-badge">🤝 特约共创好友：竹叶</div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="看见好事很美" style="margin-top: 0;">看见好事很美</h2>
+                    <p>因着存在一群因好事而相聚的朋友，总能让我们看到世界更多不一样的温暖与柔软。</p>
+                    <p>本期<strong>好事发生APP</strong>的<strong>特约好友</strong>是@<strong>竹叶</strong> ：她今年23岁，刚刚毕业进入社会，是一位新上任的化学老师。</p>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0; margin-bottom: 8px;">感谢好事发生APP，恰逢时宜地出现在了我的生命里，陪伴我第一次入职场、第一次谈恋爱。</p>
+                        <p style="margin: 0; margin-bottom: 8px;">我用好事发生记录初入职场的珍贵感受和每个快乐瞬间，哪怕遇到不开心的事情，我也知道，这些都是宝贵的经历。</p>
+                        <p style="margin: 0; margin-bottom: 8px;">对了，我的恋爱也是因为好事发生App而开始的。记录好事让我感受到生活中的很多快乐，然后我每天把这种幸福感分享给他，我们就在一起啦。</p>
+                        <p style="margin: 0;">后来我又在这里记录了很多爱、很多成就和很多生活里细碎明媚的开心……</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0;">欢迎来到她的世界</h2>
+                    <p>在她分享的好事里，我们可以看到她这一路走来的成长与收获，如果美好的尽头用童话来拟喻，她像一个述写自传的公主，这里就是她的童话王国。</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+                        <img src="images/friend/11-CBzl-BrJ.webp" alt="图片11" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/12-CzjxSD8c.webp" alt="图片12" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/13-CU9NNSlG.webp" alt="图片13" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/14-D-Clvcgy.webp" alt="图片14" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                    </div>
+                    <p style="font-weight: 500; color: var(--gold);">爱的连续剧是Happy ending，好事发生在生活的每一份平淡与浪漫的波峰波谷间，记录永远是珍贵和有意义的。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="好事延续" style="margin-top: 0;">好事发生，好事延续</h2>
+                    <p>能量守恒定律只能界定物质，爱可以在人间具象化，但爱的能量无穷大，收获爱感受爱反馈爱。</p>
+                    <p><strong>她也在筑造着美好与浪漫，用生活给她的温柔与善意--</strong></p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+                        <img src="images/friend/15-Ds1MU-gI.webp" alt="图片15" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/16-CijkkuTg.webp" alt="图片16" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/17-BvERfinj.webp" alt="图片17" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/18-Csjn8Kp1.webp" alt="图片18" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                    </div>
+                    <p>我们赞叹着日出日落的永久不歇，我们感叹着大自然为生命带来的震撼，却总容易忽略，我们本身就是自己创造的最伟大的艺术品。</p>
+                    <p><strong>世界需要你独特的美，爱自己是一门要倾尽一生的必修课。</strong></p>
+                    <img src="images/friend/19-BI0mrXLg.webp" alt="图片19" style="border-radius: 16px; max-width: 100%; margin-top: 16px; border: 1px solid var(--border);">
+                </div>
+
+                <div class="section-card" style="background: linear-gradient(135deg, #fffdf9 0%, #fffbf0 100%); border-color: var(--gold-border);">
+                    <h2 id="记录的意义" style="margin-top: 0; color: var(--gold);">记录的意义</h2>
+                    <p><strong>感谢竹叶，也感谢每一位朋友对生活的热爱，让好事发生APP可以作为一个媒介，连接世界更多的美好。</strong></p>
+                    <p><strong>最后想告诉大家的是，App只是一个工具，改变的是我们看待世界的眼光。</strong></p>
+                    <p style="font-size: 1.1rem; color: var(--gold); font-weight: 600; text-align: center; margin-top: 24px;">幸福在身边，爱就在眼前。</p>
+                </div>
+            </section>
+
+            <section class="section" id="moment">
+                <div class="hero-card">
+                    <span class="hero-emoji">📸</span>
+                    <h1 id="美丽时刻">美丽时刻</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">🌅 ｜ 🌸 ｜ ☀️ ｜ 🌈 ｜ 📸</p>
+                    <div class="co-creator-badge">🤝 特约共创好友：Amazing 及即刻网友</div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="恢复能量" style="margin-top: 0;">在春天，恢复能量</h2>
+                    <div style="background: var(--bg-color); padding: 20px 24px; border-radius: 16px; margin-bottom: 24px;">
+                        <p style="margin: 0; font-weight: 600;">我们在即刻发起了一个好奇点名：</p>
+                        <p style="margin: 8px 0 0; color: var(--gold);">【有什么适合在春天恢复能量做的事吗？】</p>
+                    </div>
+                    <p>以下为部分精选回答。</p>
+                    <img src="images/friend/2-DsK3VRBo.webp" alt="恢复能量点名" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    
+                    <div style="background: var(--bg-color); padding: 24px; border-radius: 16px; margin-top: 24px; max-height: 400px; overflow-y: auto; border: 1px solid var(--border);">
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@桂纶镁本人</span>：穿漂亮衣服跳舞💃</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@索隐</span>：有规律的做些什么 比如锻炼 比如看着窗户或者是每天出去走一下 反正在于持续性</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@啊卢</span>：户外活动！</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@江捕头奉旨拿人</span>：独自一人去散散步，和好朋友喝喝茶</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@毛大吉</span>：远离屏幕！去公园坐坐！！</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@樟子木华</span>：晒太阳，郊游</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@王香菇</span>：看喜欢的电影</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@月牙弯弯</span>：打羽毛球、郊外爬山、798喝咖啡散步看展、学习一个舞蹈</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@小花拉</span>：晒太阳，最好脚边有一只猫。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@皮赢赢</span>：享受阳光与花</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@成长快乐的樱桃子</span>：去绿草地晒太阳，看春天的花朵，吹春天暖暖的风</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@站在光里的小黄人</span>：出门 晒太阳！逛绿油油生机勃勃的公园</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@farewellalaska</span>：逛公园，吃冰淇淋，躺在草坪上晒太阳！</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@楽_冬瓜</span>：春天到处都绿了 最适合在阳光明媚的天气去公园踏青放风筝啥的</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@并没有趣s</span>：当然是晒太阳啦 最近一周都没太阳 有时午休起来看到出太阳了即使才出了几分钟 也能让我开心一下午哈哈哈</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@我是阿姨</span>：感受阳春 撸猫看书 白茶清欢</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@贱尼孚</span>：在有太阳的窗边躺平 或者玩拼图</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@Nico_Land</span>：春雨绵绵的午后，躺在沙发，关掉手机，看一会书，盖上毯子，睡上一会</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@花卷儿Er</span>：吹温柔的晚风，然后去步行美食街大吃特吃</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@深野晴雨</span>：软在春风里，像一块丝巾。去阳光流过的地方，闻一闻春天的味道。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@漂浮岛屿</span>：追玉兰、桃花、樱花的花期，去金海湖徒步，去圆明园晃荡，接触大自然～</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@阿志的信</span>：去春日的田野骑行吧。！上次去太湖西京湾体验很好，一路的桃、杏、梅、李，还有大片的樱花林和油菜花田获。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@5353</span>：有计划的运动 无意间闻到的花香</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@六加零</span>：去太子湾看一次樱花吧</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@星星过蔷薇</span>：一定要看看季节限定的花花～然后把美丽的薄薄裙子们拿出来，脱掉秋裤，就很快乐啦</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@廿三</span>：放下外界对你的一切要求，在阳光明媚的下午做一件心底一直想干的事情，或者直接在一片人少的草地上晒晒太阳</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@大柱砸</span>：下雨天站天桥上感受细雨蒙蒙，看路边的树抽出新芽，感觉周遭的一些都在努力活着</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@小马宋王大洋</span>：睡觉！睡大觉！春眠不觉晓那种大觉！</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@哩梨lili</span>：去公园野餐、散步、拍照、放空自己</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@hrb不再见</span>：春天最有生机的就是植物，不能是动物。动物在意乱情迷，不好。我喜欢像植物一样，晒太阳，深呼吸，把空气中的所有甜味都吸到肚子里。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@百宝箱再度怒沉杜十娘</span>：吃个油焖春笋、腌笃鲜和蚕豆泥温泉蛋，配上荠菜拌荸荠、香干马兰头和菊花脑鱼圆汤</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@电烤鸭嘴兽</span>：吃春菜（春笋毛豆香椿马兰头是最棒的！）写日记，把自己一段时间的生活想法顺顺毛，边写会边感慨日子没白过 高强度运动，连上两节健身课，结束后获得多巴胺以及“我真不错”的自我认同感。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@Lenn-_-</span>：难道不是像冬眠过后的熊一样疯狂摄入，肯德基麦当劳各一桶，烧鸭牛腩煲仔饭，饺子馄饨叉烧包，烧饼凉皮肉夹膜，拉肠皮蛋瘦肉粥！使劲造！</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@要好多小鱼干</span>：到没有天花板的地方去，骑骑车吹吹风，看看天空和植物，和朋友聊聊天发发呆，瞬间充满电</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@阿shun又在散步了</span>：去散步，看公园南方稍纵即逝的春色 看街上枝头嫩绿色不断刷新 填满</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@七九63</span>：放风筝，荡秋干，爬山，野餐</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@减肥中的大鱼怪</span>：天气好的时候去骑单车，爬山或者带着期待听着歌慢悠悠地去菜市场买新鲜的瓜果蔬菜，回来给自己做一顿好吃的！还有去看一切与绿色有关的事物！</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@绿豆莎</span>：去动物园，买花，在动物园回家的路上买花</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@伤心羊角蜜</span>：晒太阳、吹风、和帅哥在没人的河堤边打啵</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@涅索斯寒</span>：吹着柔和的夜风散步，然后期待一碗腌笃鲜</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@seefany</span>：❶整理歌单，梳理心情🎧</div><p>❷和朋友约出去探店想吃的餐厅🍴</p><p>❸脱去厚厚的外套，背上杯子出门打咖啡☕️</p><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@鲸钢</span>：理想化一点是在晴天去公园赏花晒太阳，这个时间点乌山的玉兰花樱花桃花全开了，但可惜今年天气很差一直没去。其他能想到的可能是收拾房间，翻看之前的动态。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@长山大春</span>：进入省电模式，直到遇到点燃你的事情为止。找寻内在的锚，不向外求。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@从小瞎看</span>：穿暖和点，多睡懒觉，少思考，得闲饮茶，逗逗鸟，买一束符合春天的花插起来。今天计划好明天吃什么，去图书馆看一下午闲书。做个春日颜色的指甲。给招财树加油打气。多洗澡，多洗地。有空就收纳整理。想吃什么先别急着吃，规划好怎么去吃最舒服。对该认真的事情别太认真，对不该认真的事情要一本正经。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@皮日休</span>：睡觉、下厨、冲咖啡，搭配朋友使用效果更佳。</div><div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);"><span style="color: var(--gold); font-weight: 500;">@莎拉芭奇</span>：把艾草麻糍煎到两面微黄</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0;">春天的好事发生</h2>
+                    <p>春色正好时，一个不经意的抬头，都会有意想不到的答案。</p>
+                    <p>或许你也想看看，一些春天的好事发生：</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 8px;">春天快乐，生日快乐@Lazy</p>
+                            <img src="images/friend/3-Cembz3Vb.webp" alt="图片" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        </div>
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 8px;">含苞待放的花与心情@D-Lin~</p>
+                            <img src="images/friend/4-D6tj5ziS.webp" alt="图片" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        </div>
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 8px;">春天到了要多散步@春娇</p>
+                            <img src="images/friend/5-CrXD4UWt.webp" alt="图片" style="border-radius: 12px; width: 100%; border: 1px solid var(--border);">
+                        </div>
+                    </div>
+                    <p style="font-weight: 500; text-align: center; color: var(--gold);">今天也有好事发生。✨</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="世界地球日" style="margin-top: 0;">好事发生在世界地球日</h2>
+                    <p>每个人都是大自然的孩子。接触真实的、物理的、离线的世界让人身心愉悦。就像脱口秀永远无法只在元宇宙里观看，运动的魅力也必须挥洒汗水才能感受得到。</p>
+                    <p>当然了，如果晒太阳，最好出门晒。如果去看花，最好闻一闻。如果打球那最好是外场，能踩到草坪，呼吸新鲜空气。</p>
+                    <p>4月22日是世界地球日，我们在好事发生群里，向大家征集了一些和大自然相处的故事。</p>
+                    
+                    <div style="display: flex; gap: 16px; margin: 24px 0;">
+                        <img src="images/friend/1-Dy7jLSAD.gif" alt="图片" style="border-radius: 12px; max-width: 48%;">
+                        <img src="images/friend/2-Cb2LC1pL.gif" alt="图片" style="border-radius: 12px; max-width: 48%;">
+                    </div>
+                    
+                    <p>这里面有爬山的好事，打球的好事，养花种草的好事，到户外去摄取快乐、和动植物相处的各种好事。一起来看闪光的日子：</p>
+                    
+                    <div style="margin-top: 32px;">
+                        <p>@红豆生南国女士 的今年第一次上山记录⛰️：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/3-BsLfp_fk.webp" alt="图片"></p><br><p>@volcanoy 从绿植和清新湖水中充电🔋：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/4-B5wlPOKu.webp" alt="图片"></p><br><p>@春娇 在散步中感受具象的生活😄：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/5-BX6b7rZS.webp" alt="图片"></p><br><p>@邹当当 跑步时偶遇小猫们🐱 ：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/6-CZhHwkN2.webp" alt="图片"></p><br><p>@The best 在公园里和漂亮小狗贴贴🐶 ：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/7-4RAFdXgS.webp" alt="图片"></p><br><p>@Y丹 被葱开的花美到💐：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/8-9kZWSiHq.webp" alt="图片"></p><br><p>山中野橘子@X. 和伙伴们在山里喜相逢🎉：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/9-eKkYqOAV.webp" alt="图片"></p><br><p>心血来潮狂奔80公里去看海的@老c：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/10-CLHS9QHK.webp" alt="图片"></p><br><p>「副业」是登山运动员的快乐 @10米长泽雅美：</p><p><img style="border-radius: 12px; max-width: 100%; border: 1px solid var(--border); margin: 8px 0 24px 0;" src="images/friend/11-DPWpBSAe.webp" alt="图片"></p><br>
+                    </div>
+
+                    <div class="quote-block" style="margin-top: 24px;">
+                        <p style="margin: 0;">春天来了，鼓励大家多出去玩，去社交距离近的地方玩，找友善的地方玩，毕竟在大城市，人和人想发生点什么太难了。<br><br>地球美丽，我们共同爱护。真是好日子，阳光太好了。你那里天气好吗？🌈</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="爱自己" style="margin-top: 0;">当我开始学习如何爱自己</h2>
+                    <p>快乐越来越成为一种能力——作为当代人，需要刻意练习的一种能力。</p>
+                    <p>快乐来源有很多种。可以很大，世俗名利；也可以很微小，一道美丽的风景就足够了。每天认真看看夕阳，就可以很快乐。</p>
+                    <div style="display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap;">
+                        <img src="images/friend/1-xy5PE9-j.webp" alt="夕阳" style="border-radius: 16px; width: 100%; border: 1px solid var(--border);">
+                    </div>
+                    <p>生活很美好。哪怕遇到再多的糟心事，地球仍然匀速转动，定时投送着绚丽。那些是被我们称为心无挂碍的时刻。</p>
+                    
+                    <h3 style="margin-top: 32px;">日落收藏家 Amazing</h3>
+                    <p>你在如何使用好事发生？我们的好朋友@Amazing 用好事发生记录夕阳，让好事变得温柔且浪漫。</p>
+                    <p>《麦芽糖》只是一首歌，却在某一天让一份落日也染上了甜味：</p>
+                    <img src="images/friend/2-lSRii4Mv.webp" alt="麦芽糖" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border); margin: 16px 0;">
+                    
+                    <p>没事多抬头看一看天空，是成本最低的「回血」大法，蓝天是免费的，而日落是耀眼的惊喜。</p>
+                    <p>感谢他为我们解锁天空的疗愈之术，本文照片都由他提供：</p>
+                    
+                    <div style="column-count: 2; column-gap: 16px; margin: 24px 0;">
+                        <img src="images/friend/3-C1JJZ2qr.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/4-B9l7i3Ne.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/5-B41LUHIM.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/6-BsIVFl0n.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/7-DI9EBl2V.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/8-BCBa8epP.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/9-C7E5lJx6.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/10-BGenwXe8.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/11-J5znHp2h.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/12-8hq3Xl--.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/13-wJiL-JIq.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/14-COCUyHXf.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                        <img src="images/friend/15-CjGvy6te.webp" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+                    </div>
+                </div>
+
+                <div class="section-card" style="background: linear-gradient(135deg, #fffdf9 0%, #fffbf0 100%); border-color: var(--gold-border);">
+                    <h2 style="margin-top: 0; color: var(--gold);">给自己一个「疗愈时刻」</h2>
+                    <p>每一位认真写下好事的人，都是在不断提醒自己，这个宇宙是用尽力气在爱你的。</p>
+                    <p>抬头看一看窗外，出门散步、爬山、逛公园，去看一切没有天花板的地方，感受世界真实的辽阔，天空和自然就是最好的能量场。恢复能量，就现在。</p>
+                    <p>你也可以在手机桌面添加好事发生「随机回顾小组件」，和美好回忆不期而遇，让那些闪光一刻重新照亮你的生活。</p>
+                    <p style="font-weight: 600; text-align: center; margin-top: 24px;">我们需要靠这些“微小”的幸福活着，祝你今天也有好事发生。✨</p>
+                </div>
+            </section>
+
+            <section class="section" id="celebrate">
+                <div class="hero-card">
+                    <span class="hero-emoji">🥂</span>
+                    <h1 id="为每一件小事庆祝">为小事庆祝</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">🎉 ｜ 🎊 ｜ ⭐ ｜ 🌟 ｜ 🥂</p>
+                    <div class="co-creator-badge">🤝 特约共创好友：florence、葛子仪 等用户</div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="练习快乐的能力" style="margin-top: 0;">练习快乐的能力</h2>
+                    <p>我们每个人都在根据自己的生活经验，构建独属于自己的知识系统。在遇到不开心的事情时，用自己的逻辑抵御那些让我们变得更加糟糕的一切。</p>
+                    <p>来自家人、恋人、朋友的支持固然重要，但最终能从逆境中走出，每个人用的还是自己发明的技法，凭借的是自己的力量——因为没有任何人，比自己更懂自己。</p>
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0; margin-bottom: 8px;">好事发生呢，开心的时候，你记录个10条，可能没啥感觉。但当你难过的时候，翻一翻，发现记录的那些好事真的有用：哎，原来发生过这么多好事儿啊！</p>
+                        <p style="margin: 0;">——它们可真的是，太容易被忘记了。紧接着你就会发现，现在正在经历的坏事，也没什么嘛。</p>
+                    </div>
+                    <p>我们日常记录好事的意义，就是在练习快乐的能力，学会体会一点一滴的幸福，珍藏那些星星。在不开心的时候，那些用力活过的闪着光的美丽日子，等到一个临界点，它们会来帮你。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0;">用户闪光瞬间</h2>
+                    <p>随机分享几件用户们发在群里的好事：</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin: 24px 0;">
+                        <img src="images/friend/11-CQcW76hS.webp" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <img src="images/friend/12-6ufVesKT.webp" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <img src="images/friend/13-3H9oK82n.webp" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <img src="images/friend/14-C0g_6DXk.webp" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <img src="images/friend/15-CqwsSeXB.webp" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                    </div>
+                    <p>台湾有个著名的钢琴品牌叫山叶钢琴，他们家的广告语叫“学琴的孩子不会变坏”。我说说我的理解：<strong>时间花在哪里，用心感受什么，世界就是什么样的。</strong></p>
+                    <p>能感受美好的人，更容易发现美好。很开心好事发生App能作为用户的一个基本工具，陪你走过一段路，帮助你养成“常想一二”的习惯，培养快乐的能力。</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="珍珠习惯" style="margin-top: 0;">周一居然能这么美好</h2>
+                    <p>今天分享我们的好朋友 florence 在群里发的好事：</p>
+                    <div style="display: flex; gap: 16px; margin: 16px 0; flex-wrap: wrap;">
+                        <img src="images/friend/21-Dv8HUFRi.webp" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border);">
+                        <img src="images/friend/22-DdktoNlp.webp" style="border-radius: 16px; max-width: 100%; border: 1px solid var(--border);">
+                    </div>
+                    <p>有人说，周一居然能这么美好。</p>
+                    <p>是呀，周一真的，有够烦。和大家分享一个概念：《福格行为模型》中提到的 <strong>「珍珠习惯」 (Pearl Habit)</strong> 。意思是，将原本惹人厌烦的事情，转化成美好的提示。</p>
+                    <div style="background: var(--bg-color); padding: 20px 24px; border-radius: 16px; margin: 24px 0; border: 1px solid var(--border);">
+                        <ol style="margin: 0; padding-left: 20px; color: var(--text);">
+                            <li style="margin-bottom: 8px;">至少列出经常困扰你的10件事（排长队、噪声等）。</li>
+                            <li style="margin-bottom: 8px;">选出清单上出现得最频繁、最烦人的事项。</li>
+                            <li style="margin-bottom: 8px;">探索在烦恼之后你可以做的新的、有益的习惯，提出至少5个选项。</li>
+                            <li style="margin-bottom: 8px;">在步骤3的结果里挑选出你的最佳选项，并为之创建一个微习惯配方。</li>
+                            <li>开始实践你的“珍珠习惯”。</li>
+                        </ol>
+                    </div>
+                    <p>比如，周一我会处理大量的新的沟通和积压工作，我就固定在下午三点，点一份我最喜欢的双皮奶。我会一边品尝它一边想：我在做着有价值有挑战的工作，我还用自己赚的钱给自己买喜欢吃的好吃的东西。</p>
+                    <p style="font-weight: 500; color: var(--gold);">成效最佳的改变，源自感觉良好，而非感觉糟糕。这样，讨厌的周一也有了可爱的节目，变成了值得庆祝的节日。</p>
+                </div>
+            </section>
+
+            <section class="section" id="love">
+                <div class="hero-card">
+                    <span class="hero-emoji">💕</span>
+                    <h1 id="恋爱日志">恋爱日志</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">先学会爱自己的人，更容易掌握快乐生活的真谛</p>
+                    <div class="co-creator-badge">🤝 特约共创好友：李发芽</div>
+                </div>
+
+                <div class="section-card">
+                    <h2 id="恋爱好事本" style="margin-top: 0;">恋爱好事书</h2>
+                    <p>爱情这件事，努力种花永远是正解。</p>
+                    <p>不管有没有与爱人坠入爱河，「爱人的能力」都让我们一遍遍地享受人生的灿烂与丰盈。与对象一起记录好事，又会是什么样的体验呢？</p>
+                    <p>本期<strong>好事发生APP</strong>的特约好友是@<strong>李发芽</strong>，她跟对象一起写了一本【恋爱好事书】，分享在记录第300天纪念日的时候——</p>
+                    
+                    <div class="quote-block" style="margin: 20px 0;">
+                        <p style="margin: 0; margin-bottom: 8px;">之前上班的时候是和朋友用在线文档记录开心小事的，但不咋方便+上班也不开心主打一个硬写，没坚持下来。</p>
+                        <p style="margin: 0; margin-bottom: 8px;">不上班后记录好事发生，是自由职业者的日报，是<strong>平淡生活里的锚点</strong>。</p>
+                        <p style="margin: 0; margin-bottom: 8px;">后来对象也不上班了，就开始雷打不动睡前一起记录好事发生，是<strong>比做个情侣号更便捷的恋爱本</strong>。</p>
+                        <p style="margin: 0;">记录了300天，导出一看有400M的好事书，幸福感爆棚！</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0;">小李与小黄的日常</h2>
+                    <p>每一天都在，认真经营这段恋情。每一天都有，与你相爱的故事。</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 8px; color: var(--text-light);">同吃一顿饭，也有甜蜜滋味</p>
+                            <img src="images/friend/1-C7bXZrWh.jpg" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        </div>
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 8px; color: var(--text-light);">小猫踩了踩我们快乐的家</p>
+                            <img src="images/friend/2-BSVgMZWA.jpg" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        </div>
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 8px; color: var(--text-light);">每天都分享日常小事</p>
+                            <img src="images/friend/3-DEAICr2v.jpg" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        </div>
+                        <div>
+                            <p style="font-weight: 500; margin-bottom: 8px; color: var(--text-light);">在彼此的生活里有很深的印迹</p>
+                            <img src="images/friend/4-BXEaTdvy.jpg" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        </div>
+                    </div>
+                    
+                    <p>还有很多每天都在好好吃饭的小李与小黄：</p>
+                    <div style="display: flex; gap: 16px; margin: 16px 0;">
+                        <img src="images/friend/5-B9aO3Cjq.jpg" style="border-radius: 12px; max-width: 48%; border: 1px solid var(--border);">
+                        <img src="images/friend/6-BROVjLpe.jpg" style="border-radius: 12px; max-width: 48%; border: 1px solid var(--border);">
+                    </div>
+                </div>
+
+                <div class="section-card" style="background: linear-gradient(135deg, #fffdf9 0%, #fffbf0 100%); border-color: var(--gold-border);">
+                    <h2 style="margin-top: 0; color: var(--gold);">量子纠缠的载体</h2>
+                    <p><strong>胃是一个情绪器官，能一起分享“饱肚滋味”，是人类高级的浪漫。</strong></p>
+                    <p>好事发生是一个单机软件，我们一直认为：记录好事是一件很私密的事情。能「共创」同一条好事，是一件更加伟大且亲密的事。</p>
+                    <p>所谓神仙眷侣，不过是两个凡人，把每天细碎的日常，组写成宇宙恒久的浪漫——在键盘闪烁间，用指尖的温度，一遍遍重写爱的相对论。</p>
+                    <p>感谢小李与小黄分享的恋爱好事本，让我们看到了幸福生活的更多可能性。</p>
+                    <p style="font-weight: 600; text-align: center; margin-top: 24px; color: var(--gold);">每一份幸福的心情都很珍贵，祝你今天也快乐。🌟</p>
+                </div>
+            </section>
+
+                                                <section class="section" id="faq">
+                <div class="hero-card">
+                    <span class="hero-emoji">💡</span>
+                    <h1 id="常见问题">常见问题</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">为你解答关于好事发生的一些疑惑</p>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q">01：iOS 和安卓的会员是互通的吗？</div>
+                        <div class="faq-a">
+                            <p>因为好事发生App没有后台，为了保护各位的数据安全，也是为了防止如果由于资金不够服务器关停大家数据清空的情况，所以采用了低成本运行的方式。</p>
+                            <p>所以在两端的购买记录都是存在应用商店后台。也就是说，<strong>iOS 使用 Apple ID 绑定，安卓通过微信登录绑定。两端的会员体系不互通。</strong></p>
+                            <p>但在同一系统内，如果您更换了新手机，只需在新手机上登录同一个 Apple ID / 微信账号，就可以<strong>无缝同步您的会员权限和全部记录</strong>（前提是在旧手机上已开启 iCloud 同步 / 数据同步）。</p>
+                            <p>此外，双端好事都可以导出成“好事书”永久保存并且打印出来，让你生活里的闪亮瞬间多一个现实分身。</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">02：我已经购买了会员，为什么没有生效？</div>
+                        <div class="faq-a">
+                            <p>点击「设置」，点击会员购买页，点击「开始订阅」按钮下方的小字 <strong>恢复购买</strong>。如果依然没有生效，请联络开发者协助。</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">03：记录在里面的好事会被官方人员看到吗？</div>
+                        <div class="faq-a">
+                            <p>不会。好事发生是一款没有任何官方后台服务的产品，所有数据都是加密保存在您的个人设备和个人 iCloud 云盘上的。所以不用担心被任何人看到，这是你绝对私密的自留地。</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">04：好事发生有社区吗？</div>
+                        <div class="faq-a">
+                            <p>好事发生 App 内是没有社区功能的。遵循好事发生的设计初衷：这里是你的快乐存钱罐，是你隐秘的赛博避风港，不会有其他人看到你的好事。</p>
+                            <p>如果你想分享出来，可以发在任何内容平台。如果你想跟大家交流，非常欢迎添加开发者微信加入「好事群」。</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">05：我的好事怎么没有了？</div>
+                        <div class="faq-a">
+                            <p>一般是因为卸载重装导致的。因为数据默认都在本地：</p>
+                            <ul>
+                                <li><strong>苹果设备：</strong>强烈建议在设置里开启 <strong>iCloud 同步</strong>权限，这样重装也不会丢失。</li>
+                                <li><strong>安卓设备：</strong>注意不要清理应用数据，建议定期使用导出备份功能。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">06：如果我更换了设备怎么办？</div>
+                        <div class="faq-a">
+                            <p>从苹果换苹果的话，是跟随 iCloud 无缝切换的；如果安卓换安卓，可以使用应用内的「数据同步」功能迁移。</p>
+                            <p>我们不仅有手机端产品，也有 Apple Watch 和 Vision Pro 端，可以在各个苹果生态设备间无缝同步。</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">07：我想买好事发生会员送给朋友，怎么购买？</div>
+                        <div class="faq-a">
+                            <p>感谢你的支持，我们尚未开发礼品卡功能。你可以直接向朋友推荐 App，祝你和你的朋友都好事发生。</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">08：怎么投稿自己的好事？</div>
+                        <div class="faq-a">
+                            <p>欢迎你随时在好事群分享你的好事，朋友们会为你送上真挚的夸奖和祝福。好事发生团队也会精选「好事日报」，内容都来自群内的投稿。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-q">09：我有好事发生 App 的会员码，怎么兑换？</div>
+                        <div class="faq-a">
+                            <p>兑换方式如下：</p>
+                            <img src="images/friend/640-Bmi8iSyk.webp" alt="兑换说明" style="max-width: 100%; border-radius: 12px; margin-top: 8px;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="thanks">
+                <div class="hero-card">
+                    <span class="hero-emoji">🙏</span>
+                    <h1 id="特别感谢">特别感谢</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">感谢所有帮助支持我们的朋友们，祝你好事发生。🍀</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0;">核心团队与贡献者</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-top: 24px;">
+                        
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">产品经理 &amp; 创始人</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">全平台: <a href="https://mp.weixin.qq.com/s/jDvAH4OhN6qR5DfCkkLjBg" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">王梦珂Mengke/后厂女工小王</a></p>
+                        </div>
+                        
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">iOS工程师</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">即刻: <a href="https://okjk.co/qwn9rS" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@痘师傅</a></p>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">安卓工程师</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">即刻: <a href="https://okjk.co/VBPx20" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@蜻蜓__ (Noah)</a></p>
+                        </div>
+                        
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">设计师</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">大Q <span style="font-size: 0.85rem; color: #999;">（潜水中）</span></p>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">运营负责人</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">微博: <a href="https://weibo.com/u/3312140881" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@10米长泽雅美 (美美)</a></p>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">设计顾问</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">即刻: <a href="https://okjk.co/1Av0SW" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@小马宋王大洋 (洋哥)</a></p>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">文案统筹</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">即刻: <a href="https://okjk.co/hGolKX" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@Amaz丶 (大A)</a></p>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">英文版统筹</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">即刻: <a href="https://okjk.co/rxHlGI" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@seefany (西柚柚)</a></p>
+                        </div>
+
+                        <div style="background: var(--bg-color); padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <p style="margin: 0 0 8px; font-weight: 600; color: var(--text);">周边开发统筹</p>
+                            <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">即刻: <a href="https://okjk.co/T9Ryd0" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 500;">@渣克镇镇长 (镇长)</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <footer class="footer" id="site-footer">
+                <p>好事，正在路上。🍀</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+
+        // Section switching
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item, .promo-btn');
+        const sectionIds = Array.from(sections).map(s => s.id);
+        const footer = document.getElementById('site-footer');
+
+        // Section title map for nav labels
+        const sectionTitles = {};
+        navItems.forEach(n => {
+            const href = n.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                const id = href.substring(1);
+                sectionTitles[id] = n.textContent.trim();
+            }
+        });
+
+        function showSection(id) {
+            sections.forEach(s => s.classList.remove('active'));
+            navItems.forEach(n => n.classList.remove('active'));
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+            navItems.forEach(n => {
+                if (n.getAttribute('href') === '#' + id) n.classList.add('active');
+            });
+            // Footer: only show on last page
+            const isLast = id === sectionIds[sectionIds.length - 1];
+            footer.style.display = isLast ? 'block' : 'none';
+            // Build page nav
+            buildPageNav(id);
+        }
+
+        function buildPageNav(currentId) {
+            // Remove old page-nav
+            document.querySelectorAll('.page-nav').forEach(el => el.remove());
+            const idx = sectionIds.indexOf(currentId);
+            const nav = document.createElement('div');
+            nav.className = 'page-nav';
+            if (idx > 0) {
+                const prevId = sectionIds[idx - 1];
+                const a = document.createElement('a');
+                a.className = 'prev';
+                a.textContent = sectionTitles[prevId] || '上一篇';
+                a.addEventListener('click', () => showSection(prevId));
+                nav.appendChild(a);
+            } else {
+                nav.appendChild(document.createElement('span'));
+            }
+            const spacer = document.createElement('span');
+            spacer.className = 'spacer';
+            nav.appendChild(spacer);
+            if (idx < sectionIds.length - 1) {
+                const nextId = sectionIds[idx + 1];
+                const a = document.createElement('a');
+                a.className = 'next';
+                a.textContent = sectionTitles[nextId] || '下一篇';
+                a.addEventListener('click', () => showSection(nextId));
+                nav.appendChild(a);
+            }
+            const target = document.getElementById(currentId);
+            if (target) target.appendChild(nav);
+        }
+
+        // Nav click handler
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = item.getAttribute('href').substring(1);
+                showSection(id);
+                if (window.innerWidth <= 768) toggleSidebar();
+            });
+        });
+
+        // Show first section on load
+        showSection('hello');
+
+        // FAQ toggle
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => {
+                q.parentElement.classList.toggle('open');
+            });
+        });
+
+        // Platform detection for Apple disclaimer
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        var isAndroid = /android/i.test(ua);
+        var urlParams = new URLSearchParams(window.location.search);
+        var platform = urlParams.get('platform');
+        
+        if (isAndroid || platform === 'android') {
+            var appleDisclaimer = document.getElementById("apple-disclaimer");
+            if (appleDisclaimer) appleDisclaimer.style.display = "none";
+            var appleWatchItem = document.getElementById("apple-watch-item");
+            if (appleWatchItem) appleWatchItem.style.display = "none";
+            var platformText = document.getElementById("platform-text");
+            if (platformText) platformText.style.display = "none";
+        }
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.style.display = 'flex';
+            // Trigger reflow
+            void lightbox.offsetWidth;
+            lightbox.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('show');
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('main img');
+            images.forEach(img => {
+                img.addEventListener('click', () => {
+                    openLightbox(img.src);
+                });
+            });
+        });
+    </script>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Enlarged Image">
+    </div>
+</body>
+</html>

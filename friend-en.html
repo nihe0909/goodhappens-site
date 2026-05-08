@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Happens & Friends</title>
+    <meta name="description" content="Good Happens - A journaling app dedicated to recording the good things in your life. We believe good news has a magical gravity.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        :root {
+            --bg: #fffaf4; --card: #ffffff; --text: #2c2c2c; --text-light: #666;
+            --accent: #ff5c3f; --accent-soft: #fff0ed; --border: #f0e8df;
+            --gold: #d4a24e; --gold-soft: #fff8ed; --gold-border: #f0dbb8;
+            --sidebar-w: 240px;
+            --font-sans: 'Noto Sans', -apple-system, sans-serif;
+        }
+        body { font-family: var(--font-sans); background: radial-gradient(circle at top, rgba(255, 236, 221, 0.95), rgba(255, 250, 244, 0) 42%), linear-gradient(180deg, #fff8f1 0%, #fffdf9 100%); color: var(--text); line-height: 1.8; font-size: 15px; }
+        .layout { display: flex; min-height: 100vh; }
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-w); position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; z-index: 100; transition: transform 0.3s ease; }
+        .sidebar::-webkit-scrollbar { width: 4px; } .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .sidebar-logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .sidebar-logo span { font-size: 15px; font-weight: 600; color: var(--text); }
+        .nav-group { padding: 0 12px; margin-bottom: 8px; }
+        .nav-item { display: block; padding: 8px 14px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 14px; transition: all 0.2s; cursor: pointer; }
+        .nav-item:hover { background: var(--accent-soft); color: var(--accent); }
+        .nav-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+        /* Main content */
+        .main { margin-left: var(--sidebar-w); flex: 1; padding: 40px 48px 80px; max-width: 800px; }
+        .section { padding-top: 24px; display: none; }
+        .section.active { display: block; }
+        .section h1 { font-size: 28px; font-weight: 700; margin-bottom: 20px; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 12px; }
+        .section h2 { font-size: 20px; font-weight: 600; margin: 28px 0 14px; color: var(--text); }
+        .section p { margin-bottom: 14px; color: var(--text); }
+        .section ul { margin: 12px 0; padding-left: 24px; }
+        .section li { margin-bottom: 8px; }
+        .section a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+        .section a:hover { border-bottom-color: var(--accent); }
+        /* FAQ */
+        .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; margin-bottom: 16px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+        .faq-item:hover { box-shadow: 0 8px 24px rgba(116, 72, 23, 0.04); transform: translateY(-1px); }
+        .faq-q { padding: 20px 24px; font-weight: 600; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--text); }
+        .faq-q::after { content: '+'; font-size: 1.5rem; font-weight: 300; transition: transform 0.3s ease, color 0.2s; color: var(--text-light); }
+        .faq-item.open .faq-q::after { transform: rotate(45deg); color: var(--accent); }
+        .faq-a { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
+        .faq-item.open .faq-a { padding: 0 24px 24px; max-height: 3000px; opacity: 1; border-top: 1px dashed var(--border); margin-top: 4px; padding-top: 16px; }
+        .faq-a p { color: var(--text-light); font-size: 0.95rem; line-height: 1.7; margin-bottom: 12px; }
+        .faq-a p:last-child { margin-bottom: 0; }
+        .faq-a ul { padding-left: 20px; color: var(--text-light); font-size: 0.95rem; margin-bottom: 12px; }
+        .faq-a li { margin-bottom: 8px; }
+        /* Footer */
+        .footer { text-align: center; padding: 40px 20px; color: var(--text-light); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; display: none; }
+        /* Page nav */
+        .page-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .page-nav a { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 8px; color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; cursor: pointer; }
+        .page-nav a:hover { background: var(--accent-soft); }
+        .page-nav .prev::before { content: '←'; }
+        .page-nav .next::after { content: '→'; }
+        .page-nav .spacer { flex: 1; }
+        /* Language switch */
+        .lang-switch { padding: 16px 24px; border-top: 1px solid var(--border); margin-top: 12px; }
+        .lang-switch a { display: block; padding: 8px 14px; border-radius: 8px; color: var(--text-light); text-decoration: none; font-size: 13px; text-align: center; transition: all 0.2s; }
+        .lang-switch a:hover { background: var(--accent-soft); color: var(--accent); }
+        
+        /* New Aesthetics & Share Section Styles */
+        .hero-card { padding: 40px 32px; border-radius: 28px; background: radial-gradient(circle at top right, rgba(255, 200, 120, 0.15), transparent 60%), var(--card); border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(116, 72, 23, 0.05); margin-bottom: 24px; text-align: center; }
+        .hero-card h1 { border-bottom: none !important; margin: 0 0 12px !important; font-size: 2.2rem !important; }
+        .hero-emoji { font-size: 3.5rem; margin-bottom: 8px; line-height: 1; display: block; }
+        .section-card { padding: 32px; border-radius: 28px; background: var(--card); border: 1px solid var(--border); box-shadow: 0 12px 30px rgba(116, 72, 23, 0.03); margin-bottom: 24px; }
+        .feature-grid { display: grid; gap: 16px; margin: 20px 0; }
+        .feature-item { padding: 20px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); display: flex; gap: 16px; align-items: flex-start; transition: transform 0.2s; }
+        .feature-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(116, 72, 23, 0.06); }
+        .feature-item .emoji { font-size: 1.8rem; line-height: 1; margin-top: 2px; }
+        .feature-item div strong { display: block; margin-bottom: 4px; font-size: 1.05rem; color: var(--text); }
+        .feature-item div p { margin: 0 !important; color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+        
+        .section-card h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); font-size: 0.82rem; font-weight: 700; flex-shrink: 0; margin-right: 8px; }
+        .reward-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-bottom: 16px; }
+        .reward-table td { padding: 14px 16px; border-radius: 16px; font-size: 0.98rem; }
+        .reward-table tr td:first-child { background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); font-weight: 600; color: var(--text); border-right: none; border-radius: 16px 0 0 16px; }
+        .reward-table tr td:last-child { background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); border-left: none; border-radius: 0 16px 16px 0; color: var(--accent-strong); font-weight: 700; }
+        .reward-notes { color: var(--text-light); font-size: 0.9rem; padding-left: 0; list-style: none; }
+        .reward-notes li { padding: 3px 0; }
+        .reward-notes li::before { content: "· "; color: var(--gold); font-weight: 700; }
+        .step { padding: 18px 20px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); margin: 12px 0; }
+        .step-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 700; margin-right: 8px; }
+        .step p { margin: 8px 0 0; color: var(--text-light); font-size: 0.95rem; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-strong); font-size: 0.82rem; font-weight: 600; }
+        .platform-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .platform { padding: 6px 14px; border-radius: 12px; background: var(--gold-soft); border: 1px solid var(--gold-border); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .email-box { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-radius: 16px; background: var(--accent-soft); margin: 12px 0; font-size: 0.95rem; transition: background 0.2s; color: var(--text) !important; text-decoration: none !important; border: none !important; }
+        .email-box:hover { background: #ffd6c4; text-decoration: none; }
+        .email-addr { font-weight: 700; color: var(--accent-strong); }
+        .email-format { margin: 10px 0; padding: 12px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); font-size: 0.88rem; color: var(--text-light); word-break: break-all; }
+        .email-format code { display: block; margin-top: 4px; color: var(--text); font-family: inherit; font-weight: 600; font-size: 0.92rem; }
+        .inspiration-grid { display: grid; gap: 10px; }
+        .inspiration-item { padding: 16px 18px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(239, 217, 200, 0.9); transition: transform 0.2s, box-shadow 0.2s; }
+        .inspiration-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(116, 72, 23, 0.06); }
+        .inspiration-item .emoji { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+        .inspiration-item strong { display: block; margin-bottom: 4px; font-size: 0.98rem; color: var(--text); }
+        .inspiration-item span { color: var(--text-light); font-size: 0.9rem; }
+        .standards-list { padding-left: 0; list-style: none; color: var(--text-light); font-size: 0.95rem; margin-top: 0; }
+        .standards-list li { padding: 6px 0 6px 20px; position: relative; }
+        .standards-list li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+        .contact-card { display: flex; align-items: center; gap: 20px; padding: 24px; border-radius: 24px; background: linear-gradient(135deg, var(--accent-soft), #fffcf9); border: 1px solid var(--border); }
+        .contact-card img { width: 100px; height: 100px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        /* Mobile */
+        .mobile-header { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: var(--card); border-bottom: 1px solid var(--border); z-index: 200; padding: 0 16px; align-items: center; gap: 12px; }
+        .menu-btn { width: 36px; height: 36px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; background: none; border: none; }
+        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 1px; transition: all 0.3s; }
+        .mobile-header .logo-text { font-size: 15px; font-weight: 600; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 99; }
+        @media (max-width: 768px) {
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); padding-top: 60px; }
+            .overlay.open { display: block; }
+            .main { margin-left: 0; padding: 68px 20px 60px; }
+            .section h1 { font-size: 22px; }
+        }
+    
+        /* Lockscreen Gallery Masonry */
+        .lockscreen-gallery {
+            column-count: 2;
+            column-gap: 16px;
+            margin: 32px 0;
+        }
+        @media (min-width: 768px) {
+            .lockscreen-gallery { column-count: 3; }
+        }
+        @media (min-width: 1024px) {
+            .lockscreen-gallery { column-count: 4; }
+        }
+        .lockscreen-item {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .lockscreen-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .lockscreen-item img {
+            width: 100%;
+            display: block;
+        }
+        .lockscreen-author {
+            padding: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            cursor: zoom-out;
+        }
+        .lightbox.show {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox img {
+            max-width: 95vw;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            object-fit: contain;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .lightbox.show img {
+            transform: scale(1);
+        }
+        /* Make content images clickable */
+        main img {
+            cursor: zoom-in;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        main img:hover {
+            filter: brightness(0.95);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile header -->
+    <div class="mobile-header">
+        <button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <span class="logo-text">Good Happens & Friends</span>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/friend/logo.png" alt="Good Happens">
+                <span>Good Happens & Friends</span>
+            </div>
+                        <nav>
+                <div class="nav-group">
+                    <a class="nav-item active" href="#hello">🌟 Hello Friend</a>
+                </div>
+                <div class="nav-group">
+                    <a class="promo-btn" href="#share">🎁 Share to Win</a>
+                    <a class="promo-btn" href="#community" style="background: linear-gradient(135deg, var(--gold-soft), #fffdf9); color: var(--gold); border-color: var(--gold-border);">🏡 Join Community</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">Support & Info</div>
+                    <a class="nav-item" href="#faq">FAQ</a>
+                    <a class="nav-item" href="#team">Special Thanks</a>
+                </div>
+            </nav>
+            <div class="lang-switch"><a href="friend.html">中文版</a></div>
+        </aside>
+
+        <main class="main">
+
+            <!-- ABOUT -->
+            <section class="section" id="about">
+                <div class="hero-card">
+                    <span class="hero-emoji">👋</span>
+                    <h1 id="about-title">Hi, Friend</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">"Good Happens" is an app dedicated to recording the good news in your life. We believe good news has a magical gravity.</p>
+                </div>
+
+                <div class="section-card">
+                    <p>Happy moments immerse you and make you forget time, but they're far easier to forget than bad news. That's why it's essential to write them down before they slip away.</p>
+                    <p><strong>"People worry too much because they have too good a memory."</strong> But recording good things helps us break the endless cycle of self-doubt, and boosts our happiness and confidence. Whether it's something as simple as enjoying your favorite food, or a major milestone like a promotion — everything deserves to be recorded and revisited.</p>
+                    <p>Kind and thoughtful people always notice those shining moments in life, using beauty and warmth to light a fire that keeps the cold at bay.</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0; border-bottom: none; padding-bottom: 0;">What Makes Good Happens Special</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <div class="emoji">🎈</div>
+                            <div>
+                                <strong>Lightweight</strong>
+                                <p>A small garden built solely for good news — no work docs, no to-do lists, no mind maps.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="emoji">⚡</div>
+                            <div>
+                                <strong>Simple & Fast</strong>
+                                <p>Browsing or recording takes just 3 seconds. One tap to capture the moment.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="emoji">🌸</div>
+                            <div>
+                                <strong>Beautiful</strong>
+                                <p>We want to give you a clean, refreshing interface that makes you want to keep writing.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="emoji">🛡️</div>
+                            <div>
+                                <strong>Pure</strong>
+                                <p>No ads, no social feeds. This space belongs only to you. Your private sanctuary.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <p>May you treasure life's beautiful memories here. Life needs good things — let's make them happen together.</p>
+                    <p style="margin-bottom: 0; color: var(--text-light); font-size: 0.95em;">Every user is our dear friend. You can find us on social media — everywhere we go by <strong>@Good Happens App</strong>.</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px; background: linear-gradient(135deg, #fffcf9, var(--accent-soft)); border: 1px solid rgba(255, 92, 63, 0.15); border-radius: 20px; padding: 32px 24px; box-shadow: 0 8px 24px rgba(255, 92, 63, 0.05);">
+                    <div style="font-size: 2.8rem; margin-bottom: 12px; line-height: 1;">🎁</div>
+                    <h3 style="margin: 0 0 8px; color: var(--accent-strong); font-size: 1.3rem; border-bottom: none; padding-bottom: 0;">Share the Goodness</h3>
+                    <p style="color: var(--text-light); font-size: 0.95em; margin-bottom: 20px;">Share how you use Good Happens on social media to earn a Lifetime Membership.</p>
+                    <a href="#share" style="display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: 99px; font-weight: 600; font-size: 1.05rem; text-decoration: none; border: none; box-shadow: 0 4px 12px rgba(255, 92, 63, 0.3); transition: transform 0.2s;">
+                        Learn More <span style="margin-left: 6px; font-size: 1.2em;">→</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- SHARE -->
+            <section class="section" id="share">
+                <div class="hero-card" style="padding-top: 48px;">
+                    <span class="hero-emoji">✨</span>
+                    <h1 id="share-to-win">Share Your Good Happens<br>Get Free Membership</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">Every good thing you record deserves to be seen.<br>Share your experience and help others discover beauty in life.</p>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">1</span> Reward Rules</h2>
+                  <table class="reward-table">
+                    <tr>
+                      <td>Post gets 10+ likes</td>
+                      <td>🎁 Monthly Membership</td>
+                    </tr>
+                    <tr>
+                      <td>Post gets 30+ likes</td>
+                      <td>🎁 Yearly Membership</td>
+                    </tr>
+                    <tr>
+                      <td>Post gets 100+ likes</td>
+                      <td>🎁 Lifetime Membership</td>
+                    </tr>
+                  </table>
+                  <ul class="reward-notes">
+                    <li>Each user can redeem once, rewarded based on the highest tier achieved.</li>
+                    <li id="platform-text">Both iOS and Android users can participate.</li>
+                    <li>Rewards will be issued within 10 working days.</li>
+                    <li><span style="color: var(--accent-strong);">⚠️ This is a limited-time event. Thresholds may increase in the future.</span></li>
+                  </ul>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">2</span> How to Participate</h2>
+                  <p style="color: var(--text-light); margin: 0 0 12px; font-size: 0.95rem;">Just 2 simple steps:</p>
+
+                  <div class="step">
+                    <span class="step-num">1</span>
+                    <strong style="color: var(--text);">Generate shareable images, screenshots, or screen recordings</strong>
+                    <p>Post to any of the following platforms:</p>
+                    <div class="platform-list">
+                      <span class="platform">Xiaohongshu</span>
+                      <span class="platform">Douyin (TikTok)</span>
+                      <span class="platform">Bilibili</span>
+                      <span class="platform">WeChat Video</span>
+                    </div>
+                    <p>Please include the tags:</p>
+                    <div class="tag-list">
+                      <span class="tag">#好事发生</span>
+                      <span class="tag">#GoodHappensApp</span>
+                    </div>
+                  </div>
+
+                  <div class="step">
+                    <span class="step-num">2</span>
+                    <strong style="color: var(--text);">Once you reach the likes goal, email us to claim</strong>
+                    <a class="email-box" href="mailto:goodhappens@163.com?subject=%E3%80%90Share%20to%20Win%E3%80%91Platform%20%2F%20Username%20%2F%20Likes%20%2F%20Android%20or%20iOS">
+                      <span class="email-icon">📮</span>
+                      <span class="email-addr">goodhappens@163.com</span>
+                    </a>
+                    <div class="email-format">
+                      Email Subject Format:
+                      <code>【Share to Win】Platform / Username / Likes / Android or iOS</code>
+                    </div>
+                    <p>Please attach: A screenshot of the post showing the number of likes.</p>
+                  </div>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">3</span> Content Inspiration</h2>
+                  <p style="color: var(--text-light); margin: 0 0 12px; font-size: 0.95rem;">You can share:</p>
+                  <div class="inspiration-grid">
+                    <div class="inspiration-item">
+                      <span class="emoji">🌟</span>
+                      <strong>Your Star Map</strong>
+                      <span>Show off your unique universe of good things.</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">📅</span>
+                      <strong>Persimmons on Calendar</strong>
+                      <span>The more good things, the more persimmons.</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">🧩</span>
+                      <strong>Widget Aesthetics</strong>
+                      <span>Show your beautiful home screen setup.</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">📖</span>
+                      <strong>Good Things Book</strong>
+                      <span>A love letter to your own life.</span>
+                    </div>
+                    <div class="inspiration-item" id="apple-watch-item">
+                      <span class="emoji">⌚</span>
+                      <strong>Apple Watch App</strong>
+                      <span>Carry good luck with you everywhere.</span>
+                    </div>
+                    <div class="inspiration-item">
+                      <span class="emoji">🌙</span>
+                      <strong>Daily Habit</strong>
+                      <span>Sharing your journaling routine before bed.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="section-card">
+                  <h2 style="margin-top:0; border-bottom:none; padding-bottom:0;"><span class="num">4</span> Verification Rules</h2>
+                  <ul class="standards-list">
+                    <li>At least 3 images, with 30+ words of genuine review.</li>
+                    <li>Videos must be at least 15 seconds long.</li>
+                    <li>Content must show the Good Happens App interface.</li>
+                    <li>Avoid "follow-for-follow" or "like-for-like" content.</li>
+                    <li>The post must remain public after redemption.</li>
+                  </ul>
+
+                  <div style="background: linear-gradient(135deg, #fffcf9, var(--accent-soft)); padding: 24px; border-radius: 20px; border: 1px solid rgba(239, 217, 200, 0.9); margin-top: 24px; text-align: center;">
+                    <p style="color: var(--text-light); font-size: 0.95em; line-height: 1.8; font-style: italic; margin: 0;">"Recording good things is cultivating the ability to be happy."</p>
+                  </div>
+                </div>
+                
+                <div style="text-align: center; color: var(--text-light); font-size: 0.85rem; padding: 20px 0;">
+                    <span id="apple-disclaimer">This event is independently initiated and operated by Good Happens, and is not affiliated with Apple Inc.</span>
+                </div>
+            </section>
+
+            <!-- COMMUNITY -->
+            <section class="section" id="community">
+                <div class="hero-card">
+                    <span class="hero-emoji">🏡</span>
+                    <h1 id="community-title">Community</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">Every Good Happens user is our dear friend.</p>
+                </div>
+
+                <div class="section-card">
+                    <p>Good Happens does not have an in-app community, but we run a WeChat user group where you can see everyone's good news and find more friends.</p>
+                    
+                    <div class="contact-card" style="margin: 24px 0; justify-content: center; text-align: center;">
+                        <div>
+                            <strong style="display: block; font-size: 1.15rem; margin-bottom: 8px;">Add the Developer on WeChat</strong>
+                            <div style="font-size: 1.4rem; font-weight: 700; color: var(--accent-strong); letter-spacing: 1px; margin-bottom: 8px;">aiwanglaoshi</div>
+                            <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Please add a note: <strong>"Good Happens"</strong></p>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-bottom: 0;">Feel free to reach out with any questions or suggestions.</p>
+                </div>
+
+                <div class="section-card">
+                    <h2 style="margin-top: 0; border-bottom: none; padding-bottom: 0;">Official Accounts</h2>
+                    <p>You can also find us on the following platforms, where we feature daily good news from our users. Everywhere we go by <strong>@Good Happens App</strong>.</p>
+                    <div class="platform-list" style="margin-top: 16px;">
+                        <span class="platform" style="background: #fff; border-color: #eee;">Weibo</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">Jike</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">Xiaohongshu</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">Douyin</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">WeChat Video</span>
+                        <span class="platform" style="background: #fff; border-color: #eee;">Official Account</span>
+                    </div>
+                </div>
+
+                <div class="section-card" style="text-align: center; border: none; background: transparent; box-shadow: none;">
+                    <img src="images/friend/happy-B5DuZjQP.png" alt="Happy Every Day" style="width: 140px; margin: 0 auto 16px;">
+                    <p style="font-size: 1.1rem; color: var(--accent-strong); font-weight: 600;">Wishing you a happy day.</p>
+                    <p style="color: var(--text-light);">Official Website: <a href="https://goodhappens.app" target="_blank" rel="noopener noreferrer">goodhappens.app</a></p>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="section" id="faq">
+                <div class="hero-card">
+                    <span class="hero-emoji">💡</span>
+                    <h1 id="faq-title">Frequently Asked Questions</h1>
+                    <p style="color: var(--text-light); font-size: 1.05rem; max-width: 28rem; margin: 0 auto; line-height: 1.6;">Answers to some common questions about Good Happens.</p>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q">01. Are iOS and Android memberships shared?</div>
+                        <div class="faq-a">
+                            <p>To protect your data in case of any service disruptions, we use a low-cost architecture where iOS and Android accounts are separate. iOS uses Apple ID, and Android uses WeChat login.</p>
+                            <p>Therefore, <strong>memberships between iOS and Android are not shared.</strong></p>
+                            <p>However, within each platform, you can seamlessly migrate your membership and all records when switching devices. iOS users can enable iCloud Sync, and Android users can use the Data Sync feature in Settings.</p>
+                            <p>Both platforms also support exporting your records as a "Good Things Book" for permanent keeping.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">02. I purchased a membership but it hasn't activated?</div>
+                        <div class="faq-a">
+                            <p>Go to Settings → Membership page → tap <strong>"Restore Purchase"</strong> (small text below the subscribe button). If it still doesn't work, please contact us for assistance.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">03. Can staff see my recorded good things?</div>
+                        <div class="faq-a">
+                            <p>No. Staff cannot see any of your records because Good Happens has no backend server. Everything you record is safely encrypted on your local device and personal iCloud.</p>
+                            <p>This is your completely private sanctuary. If you want others to see them, you can export and share them yourself!</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">04. Does Good Happens have a social community?</div>
+                        <div class="faq-a">
+                            <p>There is no in-app community feature, and we never plan to build one. Good Happens is designed as your private space.</p>
+                            <p>If you'd like to chat with other users, you're welcome to join our WeChat user group or follow us on social platforms.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">05. My records disappeared — what happened?</div>
+                        <div class="faq-a">
+                            <p>This usually happens if you reinstalled the app without iCloud sync (iOS) or cleared local data (Android). To prevent this, keep iCloud sync enabled on iOS, and avoid clearing app data on Android.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">06. What if I switch to a new device?</div>
+                        <div class="faq-a">
+                            <p>Switching between Apple devices or between Android devices will seamlessly transfer your membership and all records.</p>
+                            <p>Good Happens is also available on Apple Watch ⌚️ and Vision Pro.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEAM -->
+            <section class="section" id="team">
+                <h1>Special Thanks</h1>
+                <p>The Good Happens Team:</p>
+                <ul>
+                    <li>iOS Engineer — <strong>Dou Shifu</strong></li>
+                    <li>Designer — <strong>Big Q</strong> (stealth mode)</li>
+                    <li>Android Engineer — <strong>Noah</strong></li>
+                    <li>Operations Lead — <strong>Meimei</strong></li>
+                    <li>Design Consultant — <strong>Yang Ge</strong></li>
+                    <li>Copywriting Lead — <strong>Big A</strong></li>
+                    <li>English Localization — <strong>Seefany</strong></li>
+                    <li>Merchandise Lead — <strong>Mayor Zhack</strong></li>
+                    <li>Product Manager & Founder — <strong>Mengke Wang</strong></li>
+                </ul>
+                <p><strong>Thank you to all the friends who have supported us. Wishing you all the best. 🍀</strong></p>
+            </section>
+
+            <footer class="footer" id="site-footer">
+                <p>Good things are on the way. 🍀</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item, .promo-btn');
+        const sectionIds = Array.from(sections).map(s => s.id);
+        const footer = document.getElementById('site-footer');
+
+        const sectionTitles = {};
+        navItems.forEach(n => {
+            const href = n.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                const id = href.substring(1);
+                sectionTitles[id] = n.textContent.trim();
+            }
+        });
+
+        function showSection(id) {
+            sections.forEach(s => s.classList.remove('active'));
+            navItems.forEach(n => n.classList.remove('active'));
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+            navItems.forEach(n => {
+                if (n.getAttribute('href') === '#' + id) n.classList.add('active');
+            });
+            const isLast = id === sectionIds[sectionIds.length - 1];
+            footer.style.display = isLast ? 'block' : 'none';
+            buildPageNav(id);
+        }
+
+        function buildPageNav(currentId) {
+            document.querySelectorAll('.page-nav').forEach(el => el.remove());
+            const idx = sectionIds.indexOf(currentId);
+            const nav = document.createElement('div');
+            nav.className = 'page-nav';
+            if (idx > 0) {
+                const prevId = sectionIds[idx - 1];
+                const a = document.createElement('a');
+                a.className = 'prev';
+                a.textContent = sectionTitles[prevId] || 'Previous';
+                a.addEventListener('click', () => showSection(prevId));
+                nav.appendChild(a);
+            } else {
+                nav.appendChild(document.createElement('span'));
+            }
+            const spacer = document.createElement('span');
+            spacer.className = 'spacer';
+            nav.appendChild(spacer);
+            if (idx < sectionIds.length - 1) {
+                const nextId = sectionIds[idx + 1];
+                const a = document.createElement('a');
+                a.className = 'next';
+                a.textContent = sectionTitles[nextId] || 'Next';
+                a.addEventListener('click', () => showSection(nextId));
+                nav.appendChild(a);
+            }
+            const target = document.getElementById(currentId);
+            if (target) target.appendChild(nav);
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = item.getAttribute('href').substring(1);
+                showSection(id);
+                if (window.innerWidth <= 768) toggleSidebar();
+            });
+        });
+
+        showSection('hello');
+
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => {
+                q.parentElement.classList.toggle('open');
+            });
+        });
+
+        // Platform detection for Apple disclaimer
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        var isAndroid = /android/i.test(ua);
+        var urlParams = new URLSearchParams(window.location.search);
+        var platform = urlParams.get('platform');
+        
+        if (isAndroid || platform === 'android') {
+            var appleDisclaimer = document.getElementById("apple-disclaimer");
+            if (appleDisclaimer) appleDisclaimer.style.display = "none";
+            var appleWatchItem = document.getElementById("apple-watch-item");
+            if (appleWatchItem) appleWatchItem.style.display = "none";
+            var platformText = document.getElementById("platform-text");
+            if (platformText) platformText.style.display = "none";
+        }
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.style.display = 'flex';
+            // Trigger reflow
+            void lightbox.offsetWidth;
+            lightbox.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('show');
+            setTimeout(() => {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('main img');
+            images.forEach(img => {
+                img.addEventListener('click', () => {
+                    openLightbox(img.src);
+                });
+            });
+        });
+    </script>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Enlarged Image">
+    </div>
+</body>
+</html>
