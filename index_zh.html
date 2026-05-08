@@ -428,11 +428,17 @@
       }
     }
   </style>
+
+  <script>
+    if (!localStorage.getItem('langPref') && navigator.language && !navigator.language.toLowerCase().startsWith('zh')) {
+      window.location.replace('index.html');
+    }
+  </script>
 </head>
 <body>
   <main class="gh-page">
     <header style="position: absolute; top: 20px; right: 24px; z-index: 10;">
-       <a href="index.html" style="font-size: 14px; font-weight: 600; color: var(--muted); padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); text-decoration: none; transition: all 0.2s;">EN / 中</a>
+       <a href="index.html" onclick="localStorage.setItem('langPref', 'en');" style="font-size: 14px; font-weight: 600; color: var(--muted); padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); text-decoration: none; transition: all 0.2s;">EN / 中</a>
     </header>
     <section class="gh-container gh-hero-card">
       <div class="gh-hero">

@@ -255,6 +255,12 @@
             .nav-item.main-tab { background: linear-gradient(135deg, var(--gold-soft), #fffdf9); color: var(--gold); border: 1px solid var(--gold-border); font-weight: 700; font-size: 15px; padding: 10px 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(212, 162, 78, 0.08); margin-bottom: 8px; }
         .nav-item.main-tab:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(212, 162, 78, 0.15); }
     </style>
+
+  <script>
+    if (!localStorage.getItem('langPref') && navigator.language && !navigator.language.toLowerCase().startsWith('zh')) {
+      window.location.replace('friend-en.html');
+    }
+  </script>
 </head>
 <body>
     <!-- Mobile header -->
@@ -311,7 +317,7 @@
             <div style="margin-top: 24px; padding: 16px 24px 0; border-top: 1px solid var(--border);">
                 <a href="https://goodhappens.app" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s;"><span style="font-size: 16px;">←</span> 返回官网首页</a>
             </div>
-            <div class="lang-switch"><a href="friend-en.html">English Version</a></div>
+            <div class="lang-switch"><a href="friend-en.html" onclick="localStorage.setItem('langPref', 'en');">English Version</a></div>
         </aside>
 
         <!-- Main content -->
