@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "2BSC3BGZ5P.com.goodhappens.kakinotes",
+        "paths": ["/app/*"]
+      }
+    ]
+  }
+}
