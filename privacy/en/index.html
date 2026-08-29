@@ -149,27 +149,37 @@
 
     <article class="content-card">
       <h1>Privacy Policy</h1>
-      <p class="last-updated">Last updated: April 30, 2026</p>
+      <p class="last-updated">Last updated: August 30, 2026</p>
 
       <div class="highlight-box">
-        🔒 The short version: Your journal entries stay on your device and in your personal iCloud account. We don't collect or sell your data. If you use our AI features, relevant text is securely processed by Moonshot AI but is not used for AI training.
+        🔒 The short version: Your journal entries stay on your device or in your personal iCloud account. We do not sell your data. If you actively sign in, we process only the account identifiers needed for sign-in and membership. AI features transmit only the text required to provide the requested feature.
       </div>
 
       <h2>What data does Good Happens collect?</h2>
-      <p><strong>None.</strong> Good Happens does not collect any personal data, usage analytics, or tracking information. We do not use any third-party analytics services.</p>
-
-      <h2>Where is my data stored?</h2>
-      <p>All your journal entries, photos, and settings are stored:</p>
+      <p>Your journal entries and photos are not collected by our account service. Depending on the platform and features you choose, Good Happens processes only the following data:</p>
       <ul>
-        <li><strong>Locally on your device</strong> — Your data lives in the app's private storage on your iPhone, iPad, or Mac.</li>
-        <li><strong>In your personal iCloud account</strong> (if enabled) — If you use iCloud sync, your data is synchronized through Apple's CloudKit service using your own iCloud account. We do not have access to your iCloud data.</li>
+        <li><strong>Crash diagnostics</strong> — Device identifier, device model, and crash information may be processed on Android and HarmonyOS after you accept the privacy policy, solely to diagnose app failures.</li>
+        <li><strong>Account and membership data</strong> — When you actively sign in, we process the provider's OpenID/UnionID and a one-time Authorization Code to verify your identity. The raw Huawei identifiers are handled temporarily; our service stores a non-reversible business account identifier and membership state.</li>
+        <li><strong>No extra Huawei profile data</strong> — Huawei Account sign-in does not request your phone number, email address, contacts, or journal content.</li>
       </ul>
 
+      <h2>Where is my data stored?</h2>
+      <p>Your journal entries, photos, and most settings are stored:</p>
+      <ul>
+        <li><strong>Locally on your device</strong> — Your data lives in the app's private storage on your Apple, Android, or HarmonyOS device.</li>
+        <li><strong>In your personal iCloud account</strong> (if enabled) — If you use iCloud sync, your data is synchronized through Apple's CloudKit service using your own iCloud account. We do not have access to your iCloud data.</li>
+      </ul>
+      <p>If you actively sign in, the business account identifier and membership state are stored on the Good Happens server so membership can be restored on another device on the same platform. Signing in does not upload your journal entries or photos.</p>
+
       <h2>Third-party services</h2>
-      <p>Good Happens uses the following Apple services:</p>
+      <p>Good Happens may use the following services, depending on your platform and chosen features:</p>
       <ul>
         <li><strong>Apple CloudKit / iCloud</strong> — For syncing your data across your own devices. Apple's privacy policy applies to this service.</li>
         <li><strong>Apple StoreKit</strong> — For processing in-app purchases. Payment information is handled entirely by Apple. We never see your payment details.</li>
+        <li><strong>WeChat Open Platform</strong> — For WeChat sign-in and payment initiated by you. We do not access your contacts or chat history.</li>
+        <li><strong>Huawei Account Kit</strong> — For Huawei Account sign-in initiated by you. A one-time Authorization Code is verified by our server; OpenID/UnionID is used only for authentication and business account association.</li>
+        <li><strong>Huawei In-App Purchases</strong> — For processing purchases on HarmonyOS. Huawei handles payment details.</li>
+        <li><strong>Tencent Bugly</strong> — For crash diagnostics on Android and HarmonyOS after privacy consent.</li>
         <li><strong>Stepfun AI (阶跃星辰大模型)</strong> — Used exclusively for the "Star Map" feature to extract keywords from your journal entries. Text data sent to Stepfun is processed ephemerally solely for this purpose and is neither retained nor used for AI training.</li>
       </ul>
 
@@ -180,25 +190,25 @@
         <li>We only send the text necessary for the feature to work. We do not send your device identifiers or personal contact information.</li>
         <li>The AI provider acts strictly as a data processor. According to their API terms, data submitted is <strong>not</strong> used to train their foundation models.</li>
       </ul>
-      <p>If you do not use the AI-powered features, your data never leaves your device or your personal iCloud account.</p>
+      <p>If you do not use the AI-powered features, your journal text is not transmitted for AI processing. Minimum account data required for sign-in is handled as described above.</p>
 
       <h2>Advertising</h2>
       <p>Good Happens contains <strong>no advertisements</strong> and does not use any ad tracking or IDFA.</p>
 
       <h2>Children's privacy</h2>
-      <p>Good Happens does not knowingly collect data from children under 13. Since we don't collect any data at all, this is inherently satisfied.</p>
+      <p>Good Happens does not knowingly collect personal information from children under 13. Children should use sign-in, payment, or AI features only with guidance from a parent or guardian.</p>
 
       <h2>Photos and camera</h2>
-      <p>Good Happens may request access to your camera or photo library to let you attach photos to journal entries. Photos you select are stored only on your device and in your iCloud account. They are never uploaded to our servers (we don't have servers).</p>
+      <p>Good Happens may request access to your camera or photo library to let you attach photos to journal entries. Selected photos stay on your device and, when enabled on iOS, in your personal iCloud account. Account sign-in does not upload them to our servers.</p>
 
       <h2>Notifications</h2>
       <p>Good Happens may send you local reminders to write your daily entry, but only if you explicitly enable this feature. These notifications are scheduled locally on your device and do not involve any external service.</p>
 
       <h2>Data deletion</h2>
-      <p>You can delete any journal entry at any time within the app. To delete all data, simply delete the app from your device. If you use iCloud sync, you can also manage your iCloud storage through your device's Settings.</p>
+      <p>You can delete journal entries at any time. Uninstalling the app removes local data; iCloud data can be managed in system settings. Signed-in users can request account deletion in Settings and choose whether to remove local data. After account deletion is completed, the server no longer retains that business account or membership state.</p>
 
       <h2>Changes to this policy</h2>
-      <p>If we ever change this privacy policy, we will update this page and the "Last updated" date above. Since we don't collect your email or contact information, this page is the primary way to communicate changes.</p>
+      <p>If we change this privacy policy, we will update this page and the "Last updated" date above. This page is the primary way we communicate policy changes.</p>
 
       <h2>Contact</h2>
       <p>If you have any questions about this privacy policy, please reach out:</p>
